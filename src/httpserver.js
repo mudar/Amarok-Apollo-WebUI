@@ -50,7 +50,7 @@ HTTPServer.prototype.requestQueue = new Array();
 HTTPServer.prototype.newConnectionCallback = function(){
     var socket = this.nextPendingConnection();
 	if (this.checkIPAddress && !socket.peerAddress().isInSubnet(this.validSubnet)) {
-		Amarok.debug("Request from unauthorized IP address: " + socket.peerAddress().toString());
+// 		Amarok.debug("Request from unauthorized IP address: " + socket.peerAddress().toString());
 		socket.close();
 	}else {
 		var request = new QByteArray();
@@ -81,18 +81,18 @@ HTTPServer.prototype.newConnectionCallback = function(){
 HTTPServer.prototype.handlePendingRequests = function(){
     while(this.requestQueue.length > 0){
         r = this.requestQueue[0];
-        Amarok.debug("Pending: Handling request (left: "+this.requestQueue.length+"): "+r[1].path());
+//         Amarok.debug("Pending: Handling request (left: "+this.requestQueue.length+"): "+r[1].path());
 		try {
 			this.handleRequest(r[0], r[1]);
 		} 
 		catch (e) {
-			Amarok.debug("Error while handling request [" + r[1] + "]: " + e.toString());
+ 			Amarok.debug("Error while handling request [" + r[1] + "]: " + e.toString());
 		}
         //Remove request from queue, even when an exception occurred. This mechanism
 		//should only retry to process a request whose handling got interrupted by
 		//Amarok, not the requests whose handling failed with an exception.
         this.requestQueue.shift();
-        Amarok.debug("Handled request (left: "+this.requestQueue.length+")");
+//         Amarok.debug("Handled request (left: "+this.requestQueue.length+")");
     }
     this.pendingRequestHandlerTimer.stop();
 }

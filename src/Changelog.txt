@@ -1,3 +1,11 @@
+0.4 2013-07-05 By Mudar Noufal <mn@mudar.ca>
+    * Replaced iUI by jQuery and jQuery Mobile.
+    * UI changes to update the look & feel.
+    * Added lyrics display to CurrentTrack.
+    * Added thumbs when browsing the Collection.
+    * Added filters to Collection listviews.
+0.4 2013-07-01 By Mudar Noufal <mn@mudar.ca>
+    * Added support for a JSON API
 0.36 2010-1-11
     * Added config option to restrict access to a subnet.
     * Fixed order of tracks when adding/setting an album to/as a playlist.
