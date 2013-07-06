@@ -398,7 +398,8 @@ th{width:100%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizin
 .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal.ui-panel-content-fixed-toolbar-position-right,
 .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-push.ui-panel-content-wrap-position-right,
 .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-right{margin-left:17em}.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-push,
-.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal{width:auto}.ui-responsive-panel .ui-panel-dismiss-display-push{display:none}}.ui-collapsible-inset .ui-collapsible-content{margin:0;border-right-width:2px;border-left-width:2px}a{text-decoration:none}#home-buttons{text-align:center}#home-buttons .ui-btn{min-width:300px}#logo-amarok{max-width:100%;display:block;margin:30px
+.ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal{width:auto}.ui-responsive-panel .ui-panel-dismiss-display-push{display:none}}.ui-collapsible-inset .ui-collapsible-content{margin:0;border-right-width:2px;border-left-width:2px}a{text-decoration:none}#home-buttons{min-width:200px;max-width:400px;margin-left:auto;margin-right:auto}#home-buttons ui-btn-text{display:block}#home-buttons .ui-btn
+img{vertical-align:middle}#logo-amarok{max-width:100%;display:block;margin:30px
 auto 0}label{display:block;float:left;font-weight:normal;width:5em}.track-lyrics{text-align:center;white-space:pre-line}.album-cover
 img{max-width:100%;display:block;margin:30px
 auto;border:1px
