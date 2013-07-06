@@ -28,13 +28,11 @@ var AmarokPageEvents = (function () {
 
 	$('#playlist .track a').click(function() {
 		$.mobile.showPageLoadingMsg();
-		var parent = $(this).parent();
-		parent.toggleClass('ui-btn-active');
+		var parent = $(this).parents('li');
 		$.getJSON( '/api/cmd/playByIndex/'+ $(this).attr("data-amarok-track-id") , function(data) {
-			parent.toggleClass('ui-btn-active');
+			toggleCurrentTrack(parent, data);
 			$.mobile.hidePageLoadingMsg();
 		});
 	});
 });
-$(document).off('pageshow', '#wrapper-page').on('pageshow', '#wrapper-page', AmarokPageEvents );
 </script>

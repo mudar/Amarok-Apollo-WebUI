@@ -199,12 +199,13 @@ playlistDiv = function(path){
 		div = div.replace('###tracks###', '<li class="empty">Playlist is empty&hellip;</li>');
 	}
 	else {
+		current = Amarok.Playlist.activeIndex();
 		tracks = '';
 		randColor = -1;	// initialize variable. Will be incremented to 0 for the first coverless album
 		prevArtist = '';
 		for(trackidx=0; trackidx<Amarok.Playlist.totalTrackCount(); trackidx=trackidx+1){
 			t = Amarok.Playlist.trackAt(trackidx);
-			tracks += '<li class="track"><a href="#" data-amarok-track-id="'+trackidx+'"><img ';
+			tracks += '<li class="track'+(current == trackidx ? ' ui-btn-active' : '' )+'"><a href="#" data-amarok-track-id="'+trackidx+'"><img ';
 			if ( t.imageUrl != '' ) {
 				tracks += 'src="/img/cover/playlist/thumb/'+trackidx+'.png?t='+(new Date()).getTime() +'"'
 			}

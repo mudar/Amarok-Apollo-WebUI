@@ -23,4 +23,13 @@ setEmptyPlaylist = function(data) {
 		$('#clear-playlist').toggleClass('ui-disabled' , true);
 	}
 }
+
+toggleCurrentTrack = function(button, data) {
+	if ( data == 'undefined' ) return;
+	
+	if ( data['status'] == 'OK') {
+		$('#playlist li.ui-btn-active').removeClass('ui-btn-active');
+		button.addClass('ui-btn-active');
+	}
+}
 ;
