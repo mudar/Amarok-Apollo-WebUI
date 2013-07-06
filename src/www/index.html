@@ -36,20 +36,6 @@
 <script src="/js/jquery-jqm-amarok-min.js"></script>
 <script>
 var AmarokPageEvents = (function () {});
-var AmarokFooterEvents = (function () {
-	$('#control-buttons a').click(function() {
-		var button = $(this);
-		$.mobile.showPageLoadingMsg();
-		button.toggleClass('ui-btn-active', true);
-		$.getJSON( '/api/cmd/'+ $(this).attr('data-amarok-cmd') , function(data) {
-			if ( button.attr('id') == 'btn-play-pause' ) {
-				togglePlayPauseIcon(button, data);
-			}
-			$.mobile.hidePageLoadingMsg();
-			button.toggleClass('ui-btn-active', false).blur();
-		});
-	});
-});
 $(document).off('pageshow', '#wrapper-page').on('pageshow', '#wrapper-page', function() {AmarokFooterEvents();AmarokPageEvents();} );
 </script>
 
