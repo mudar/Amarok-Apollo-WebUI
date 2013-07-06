@@ -16,7 +16,7 @@
 <script>
 var AmarokPageEvents = (function () {
 	$('#append-tracks').click(function() {
-		$('#append-tracks').toggleClass('ui-btn-active');
+		$('#append-tracks').toggleClass('ui-btn-active',true);
 		$.mobile.showPageLoadingMsg();
 		var idTracks = '';
 		$('#all-artist-tracks .track').each( function() {
@@ -28,9 +28,9 @@ var AmarokPageEvents = (function () {
 			}
 		} );
 		$.getJSON( '/api/cmd/addMedia'+idTracks , function(data) {
-			$('#append-tracks').toggleClass('ui-btn-active');
-			$.mobile.hidePageLoadingMsg();
+			$('#append-tracks').toggleClass('ui-btn-active',false);
 			$('#append-tracks').blur();
+			$.mobile.hidePageLoadingMsg();
 		});
 	});
 

@@ -20,14 +20,20 @@
 <script>
 var AmarokPageEvents = (function () {
 	$('#append-album').click(function() {
-		$('#append-album').toggleClass('ui-btn-active');
+		$('#append-album').toggleClass('ui-btn-active',true);
+
+		var idTracks = '';
+		$('#album-tracks .track-add').each( function() {
+			if ( !$(this).hasClass('ui-disabled') ) {
+				idTracks += '/' + $(this).addClass('ui-disabled').attr("data-amarok-track-id");
+			}
+		} );
+
 		$.mobile.showPageLoadingMsg();
-		$.getJSON( '/api/cmd/addMedia###idTracks###' , function(data) {
-			
-			$('#append-album').toggleClass('ui-disabled' , true);
-			$('#append-album').toggleClass('ui-btn-active');
-			$.mobile.hidePageLoadingMsg();
+		$.getJSON( '/api/cmd/addMedia'+idTracks , function(data) {
 			$('#append-album').blur();
+			$('#append-album').toggleClass('ui-btn-active',false).addClass('ui-disabled');
+			$.mobile.hidePageLoadingMsg();
 		});
 	});
 

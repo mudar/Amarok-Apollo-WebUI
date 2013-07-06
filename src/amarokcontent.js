@@ -350,19 +350,16 @@ collectionAlbumDiv = function(path){
 	
 	trackQuery = Amarok.Collection.query('SELECT id , title FROM tracks WHERE album = '+albumId+' ORDER BY tracknumber , createdate;');
 	tracksDiv = '';
-	idTracks = '';
 	nbTracks = trackQuery.length;
 	for(trackidx = 0; trackidx < nbTracks; trackidx++){
 		trackId = trackQuery[trackidx++];
 		trackName = trackQuery[trackidx];
 		tracksDiv += '<li class="track"><a class="track-add-play" href="#" data-amarok-track-id="'+trackId+'">'+trackName+'</a><a class="track-add" href="#" data-amarok-track-id="'+trackId+'">Play</a></li>'+ LINE_BREAK;
-		idTracks += '/'+trackId;
 	}
 	
 	response = new HandlerResponse();
     div = loadFile('/www/collectionAlbum.html');
 	
-	div = div.replace('###idTracks###', idTracks);
 	div = div.replace('Album<!-- ###album###-->', albumName);
 	div = div.replace('###artist###', artistName);
 	div = div.replace('###tracks###', tracksDiv);	
