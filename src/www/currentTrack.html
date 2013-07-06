@@ -1,28 +1,37 @@
-<div id="currentTrack" title="Current Track" class="panel">
-    <fieldset>
-        <div class="row evaluation">
-            <label>Rating</label>
-            <span id="rating">###rating###</span></div>
-        <div class="row">
-            <label>Artist</label>
-            <span>###artist###</span></div>
-        <div class="row">
-            <label>Title</label>
-            <span>###title###</span>
-        </div>
-        <div class="row">
-            <label>Album</label>
-            <span>###album###</span>
-        </div>
-        <div class="row">
-            <label>Length</label>
-            <span>###minutes###:###seconds###</span>
-        </div>
-    </fieldset>
-	<div style="margin-top: 15px; text-align: center;">
-    	###coverimg###
+<header data-role="header" data-position="fixed">
+	<a href="/" data-icon="home" class="ui-btn-left" data-rel="back">Home</a>
+	<h1>Current Track</h1>
+</header>
+
+<div data-role="content" >
+	<ul data-role="listview">
+		<li>
+			<label>Artist</label>
+			<span>###artist###</span>
+		</li>
+		<li>
+			<label>Title</label>
+			<span>###title###</span>
+		</li>
+		<li>
+			<label>Album</label>
+			<span>###album###</span>
+		</li>
+		<li>
+			<label>Length</label>
+			<span>###minutes###:###seconds###</span>
+		</li>
+<!-- 
+		<li class="row evaluation">
+			<label>Rating</label>
+			<span id="rating">###rating###</span>
+		</li>
+-->
+	</ul>
+
+	<div class="album-cover">
+		<img src="###coverimg###" alt=""/>
 	</div>
-	<div style="text-align:right; margin-top:15px;">
-		<img src="/btn-reload.png" width="57" height="57" onClick="reloadCurrentTrack();" />
-	</div>
+
+	<div class="track-lyrics"><!--###lyrics###--></div>
 </div>

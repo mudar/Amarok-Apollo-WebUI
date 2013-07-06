@@ -170,6 +170,14 @@ HTTPServer.prototype.handleRequest = function(socket, header){
 			//FIXME: In some cases handlerResponse.content does not seem to be a valid QByteArray.
 			responseHeader.setValue("Content-Length", handlerResponse.content.length());
 			responseHeader.setValue("Content-Type", handlerResponse.mimeType);
+
+			if ( typeof handlerResponse.expires != "undefined" ) {
+				responseHeader.setValue("Expires", handlerResponse.expires );
+			}
+			if ( typeof handlerResponse.maxage != "undefined" ) {
+				responseHeader.setValue("Cache-Control", handlerResponse.maxage );
+			}
+
 			response = new QByteArray();
 			response.append(responseHeader.toString());
 			response.append(handlerResponse.content);
@@ -193,6 +201,9 @@ function HandlerResponse(isJson){
 HandlerResponse.prototype.setReturnCode = function(retCode, reasonPhrase){
 	this.retCode = retCode;
 	this.reasonPhrase = reasonPhrase;
+	if ( retCode == 404 ) {
+		this.content.append("<h3>404 Error</h3>Invalid request!");
+	}
 }
 
 HandlerResponse.prototype.append = function(content){
@@ -201,4 +212,12 @@ HandlerResponse.prototype.append = function(content){
 
 HandlerResponse.prototype.setMimeType = function(mimeType){
 	this.mimeType = mimeType;
+}
+
+HandlerResponse.prototype.enableCache = function(){
+	today = new Date();
+	today.setMonth(today.getMonth()+1);
+	
+	this.expires = today.toString("ddd, dd MMM yyyy HH:mm:ss GMT")
+	this.maxage = 60*60*24*30;
 }

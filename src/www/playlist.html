@@ -1,3 +1,40 @@
-<ul id="playlist" title="Playlist">
-    ###tracks###
-</ul>
+<header data-role="header" data-position="fixed">
+	<a href="#" id="clear-playlist" data-shadow="false" data-icon="delete" class="ui-btn-right" >Clear</a>
+	<a href="/" data-shadow="false" data-icon="home" class="ui-btn-left">Home</a>
+	<h1>Playlist</h1>
+
+</header>
+
+<div id="playlist" data-role="content" >
+	<ul data-role="listview" data-inset="false">
+###tracks###
+	</ul>
+</div>
+
+<script>
+var AmarokPageEvents = (function () {
+	$('#clear-playlist').toggleClass('ui-disabled' , $('#playlist li:first-child').hasClass('empty') );
+
+	$('#clear-playlist').click(function() {
+		$('#clear-playlist').toggleClass('ui-btn-active');
+		$.mobile.showPageLoadingMsg();
+		$.getJSON( '/api/cmd/clearPlaylist' , function(data) {
+			setEmptyPlaylist(data);
+			$('#clear-playlist').toggleClass('ui-btn-active');
+			$('#clear-playlist').blur();
+			$.mobile.hidePageLoadingMsg();
+		});
+	});
+
+	$('#playlist .track a').click(function() {
+		$.mobile.showPageLoadingMsg();
+		var parent = $(this).parent();
+		parent.toggleClass('ui-btn-active');
+		$.getJSON( '/api/cmd/playByIndex/'+ $(this).attr("data-amarok-track-id") , function(data) {
+			parent.toggleClass('ui-btn-active');
+			$.mobile.hidePageLoadingMsg();
+		});
+	});
+});
+$(document).off('pageshow', '#wrapper-page').on('pageshow', '#wrapper-page', AmarokPageEvents );
+</script>

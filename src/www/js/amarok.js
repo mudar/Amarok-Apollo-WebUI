@@ -1,3 +1,6 @@
+/*! Amarok WebUI scripts
+*/
+
 togglePlayPauseIcon = function(button, data) {
 	if ( data == 'undefined' ) return;
 	
@@ -20,4 +23,4 @@ setEmptyPlaylist = function(data) {
 		$('#clear-playlist').toggleClass('ui-disabled' , true);
 	}
 }
-
+;

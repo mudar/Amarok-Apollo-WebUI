@@ -1,27 +1,3 @@
-<!DOCTYPE html> 
-<html> 
-<head> 
-	<meta charset="UTF-8" />
-	<title>Amarok WebUI</title> 
-	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<link rel="stylesheet"  href="/css/jqm-flatui-amarok-min.css">
-</head> 
-<body>
-
-	<div data-role="page" id="wrapper-page">
-
-		<header data-role="header" data-position="fixed">
-			<h1>Amarok WebUI</h1>
-		</header>
-
-		<div data-role="content">	
-			<ul data-role="listview">
-				<li><a href="/current-track">Current Track</a></li>
-				<li><a href="/playlist">Playlist</a></li>
-				<li><a href="/collection">Collection</a></li>
-			</ul>
-			<img id="logo-amarok" src="/img/logo-amarok.png" alt="Amarok | Rediscover Your Music!" />
-		</div>
 
 		<footer data-role="footer" data-position="fixed"> 
 			<div class="ui-grid-d" id="control-buttons">
@@ -35,7 +11,6 @@
 
 <script src="/js/jquery-jqm-amarok-min.js"></script>
 <script>
-var AmarokPageEvents = (function () {});
 var AmarokFooterEvents = (function () {
 	$('#control-buttons a').click(function() {
 		var button = $(this);

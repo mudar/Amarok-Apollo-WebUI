@@ -45,12 +45,19 @@ fileHandler = function(path){
     if(file.open(QIODevice.ReadOnly)){
         if( pathFileInfo.completeSuffix() == "css" ){
             response.setMimeType("text/css");
+			response.enableCache();
         }else if( pathFileInfo.completeSuffix() == "js" ){
             response.setMimeType("text/javascript");
+			response.enableCache();
         }else if( pathFileInfo.completeSuffix() == "png" ){
             response.setMimeType("image/png");
+			response.enableCache();
         }else if( pathFileInfo.completeSuffix() == "gif" ){
             response.setMimeType("image/gif");
+			response.enableCache();
+        }else if( pathFileInfo.completeSuffix() == "ico" ){
+            response.setMimeType("image/x-icon");
+			response.enableCache();
         }
         response.append(file.readAll());
         file.close();

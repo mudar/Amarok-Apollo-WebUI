@@ -1,24 +1,55 @@
-<div id="currentTrack" title="Album" class="panel">
-    <fieldset>
-        <div class="row">
-            <label>Artist</label>
-            <span>###artist###</span></div>
-        <div class="row">
-            <label>Album</label>
-            <span>###album###</span>
-        </div>
+<header data-role="header" data-position="fixed">
+	<a href="#" id="append-album" data-icon="plus" class="ui-btn-right" title="Add to playlist">Add</a>
+	<a href="/" data-icon="home" class="ui-btn-left">Home</a>
+	<h1>Album<!-- ###album###--></h1>
+</header>
 
-    </fieldset>
-	
-	<div class="whiteButton" onClick="addAlbumToPlaylist(###albumid###);">Append Album to Playlist</div>
-	<div class="whiteButton" onClick="replacePlaylistWithAlbum(###albumid###);">Set Album as Playlist</div>
-	
-	<div style="text-align: center">
-		<img src="/ajax/albumCover/###albumid###" width="200" style="margin-top: 10px"/>
-	</div>
-	
-	<h2 style="margin-top: 10px">Tracks:</h2>
-	<fieldset>
+<div data-role="content" >
+
+	<ul id="album-tracks" data-role="listview" data-inset="false" data-split-icon="plus" data-shadow="false" >
+		<li data-role="list-divider"><h2>###artist###</h2></li>
 		###tracks###
-	</fieldset>
+	</ul>
+
+	<div class="album-cover">
+		<img src="###coverimg###" alt=""/>
+	</div>
+
 </div>
+
+<script>
+var AmarokPageEvents = (function () {
+	$('#append-album').click(function() {
+		$('#append-album').toggleClass('ui-btn-active');
+		$.mobile.showPageLoadingMsg();
+		$.getJSON( '/api/cmd/addMedia###idTracks###' , function(data) {
+			
+			$('#append-album').toggleClass('ui-disabled' , true);
+			$('#append-album').toggleClass('ui-btn-active');
+			$.mobile.hidePageLoadingMsg();
+			$('#append-album').blur();
+		});
+	});
+
+	$('#album-tracks .track a').click(function() {
+		$.mobile.showPageLoadingMsg();
+		var parent = $(this).parent();
+		parent.toggleClass('ui-btn-active');
+
+		var apiUrl = '/api/cmd/addPlayMedia/';
+		var btn = null;
+		if ( $(this).hasClass('track-add') ) {
+			apiUrl = '/api/cmd/addMedia/';
+			btn = $(this);
+		}
+
+		$.getJSON( apiUrl + $(this).attr("data-amarok-track-id") , function(data) {
+			if ( btn != null ) {
+				btn.addClass('ui-disabled');
+			}
+			parent.toggleClass('ui-btn-active');
+			$.mobile.hidePageLoadingMsg();
+		});
+	});
+});
+</script>
