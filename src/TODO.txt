@@ -1,10 +1,10 @@
 * Collection browsing. [Done]
-* Manipulation of playlist (clear, replace with/add song/album). [Done; clear button is missing]
+* Manipulation of playlist (clear, replace with/add song/album). [Done; replace is missing]
 * Basic authentication (RFC2617) [Done, digest auth?]
 * Play/Pause/Stop button images [Done]
 * Make controls accessible from every view (modal dlg) [Done]
-* Modify navigation in collection browsing for large collections.
-* Make UI more intuitive and appealing
+* Modify navigation in collection browsing for large collections. [Done]
+* Make UI more intuitive and appealing [Done]
 * "Push" notifications (http://en.wikipedia.org/wiki/Push_technology#Long_polling).
 * Configuration UI.
 

@@ -50,32 +50,19 @@ function AmarokWebUI() {
 AmarokWebUI.prototype.startService = function() {
   this.http = new HTTPServer( this );
   this.http.setDefaultHandler(fileHandler);
-  this.http.registerHandler("/ajax/controls", controlsDlg);
-  this.http.registerHandler("/ajax/currentTrackCover", currentTrackCover);
-  this.http.registerHandler("/ajax/currentTrackDiv", currentTrackDiv);
-  this.http.registerHandler("/ajax/ratingDiv", ratingDiv);
-  this.http.registerHandler("/ajax/playlistDiv", playlistDiv);
-  this.http.registerHandler("/ajax/playlistTrackCover", playlistTrackCover);
-  this.http.registerHandler("/ajax/collectionDiv", collectionArtistsDiv);
-  this.http.registerHandler("/ajax/collectionAlbumDiv", collectionAlbumDiv);
-  this.http.registerHandler("/ajax/collectionArtistAlbumsDiv", collectionArtistAlbumsDiv);
-  this.http.registerHandler("/ajax/collectionAllArtistTracksDiv", collectionAllArtistTracksDiv);
-  this.http.registerHandler("/ajax/albumCover", albumCover);
-  this.http.registerHandler("/ajax/nextTrack", nextTrack);
-  this.http.registerHandler("/ajax/prevTrack", prevTrack);
-  this.http.registerHandler("/ajax/playPause", playPause);
-  this.http.registerHandler("/ajax/play", play);
-  this.http.registerHandler("/ajax/pause", pause);
-  this.http.registerHandler("/ajax/stop", stop);
-  this.http.registerHandler("/ajax/incVolume", incVolume);
-  this.http.registerHandler("/ajax/decVolume", decVolume);
-  this.http.registerHandler("/ajax/addAlbumToPlaylist", addAlbumToPlaylist);
-  this.http.registerHandler("/ajax/replacePlaylistWithAlbum", replacePlaylistWithAlbum);
-  this.http.registerHandler("/ajax/addAllTracksFromArtistToPlaylist", addAllTracksFromArtistToPlaylist);
-  this.http.registerHandler("/ajax/replacePlaylistWithAllArtistTrack", replacePlaylistWithAllArtistTrack);
-  this.http.registerHandler("/ajax/clearPlaylist", clearPlaylist);
+  
+  this.http.registerHandler("/img/cover/current", currentTrackCover);
+  this.http.registerHandler("/img/cover/playlist", playlistTrackCover);
+  this.http.registerHandler("/img/cover/collection", albumCover);
+  
+  this.http.registerHandler("/current-track", currentTrackDiv);
+  this.http.registerHandler("/playlist", playlistDiv);
+  this.http.registerHandler("/collection/artists", collectionArtistsDiv);
+  this.http.registerHandler("/collection/artist/album", collectionAlbumDiv);
+  this.http.registerHandler("/collection/artist/tracks", collectionAllArtistTracksDiv);
+  this.http.registerHandler("/collection/artist", collectionArtistAlbumsDiv);
+  this.http.registerHandler("/collection", collectionIndex);
 
-  this.http.registerHandler("/ajax/collectionIndex", collectionIndex);
   this.http.registerHandler("/api/getServerVersion", getServerVersionJSON);
   this.http.registerHandler("/api/getState", getStateJSON);
   this.http.registerHandler("/api/getCurrentTrack", getCurrentTrackJSON);
