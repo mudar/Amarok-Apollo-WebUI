@@ -1,5 +1,12 @@
 a {text-decoration: none;}
 
+#home-buttons {
+	text-align: center;
+}
+#home-buttons .ui-btn {
+	min-width: 300px;
+}
+
 #logo-amarok {
 	max-width: 100%;
 	display: block;
@@ -71,6 +78,11 @@ label {
 .ui-icon-amarok-volume-up ,
 .ui-icon-amarok-volume-down { background-image: url(/img/icons-18-white-amarok.png); }
 
+.ui-icon-amarok-collection { 
+	background: url(/img/hover_info_collections-145.png) left top;
+	background-size: 145px 110px;
+}
+
 .ui-icon-amarok-prev { background-position: -1px -1px; }
 .ui-icon-amarok-pause { background-position: -37px -1px; }
 .ui-icon-amarok-play { background-position: -73px -1px; }
@@ -87,5 +99,10 @@ label {
 	.ui-icon-amarok-volume-down { 
 		background-image: url(/img/icons-36-white-amarok.png); 
 		background-size: 198px 18px;
+	}
+	
+	.ui-icon-amarok-collection { 
+		background-image: url(/img/hover_info_collections-290.png);
+		background-size: 290px 220px;
 	}
 }
