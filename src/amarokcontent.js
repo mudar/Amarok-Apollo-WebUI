@@ -106,32 +106,37 @@ albumCover = function(path){
  *  Send div with info about the track currently playing.
  */
 currentTrackDiv = function(path){
-    response = new HandlerResponse();    
-    div = '';
+	response = new HandlerResponse();
+	div = '';
 
 	engineState = Amarok.Engine.engineState();
-    if(engineState == ENGINE_STATE_PAUSE || engineState == ENGINE_STATE_PLAY){
+	if(engineState == ENGINE_STATE_PAUSE || engineState == ENGINE_STATE_PLAY){
 		div += loadFile('/www/currentTrack.html');
 		
-//        div = div.replace('###rating###', getRatingHtml());
-        div = div.replace('###artist###', Amarok.Engine.currentTrack().artist);
-        div = div.replace('###title###', Amarok.Engine.currentTrack().title);
-        div = div.replace('###album###', Amarok.Engine.currentTrack().album);
+		var rating = Amarok.Engine.currentTrack().rating;
+
+		if ( rating == 0 ) { rating = '&mdash;'; }
+		else if ( rating == 1 ) { rating = '1&nbsp;star'; }
+		else { rating = rating + '&nbsp;stars'; }
+
+		div = div.replace('###rating###', rating );
+		div = div.replace('###artist###', Amarok.Engine.currentTrack().artist);
+		div = div.replace('###title###', Amarok.Engine.currentTrack().title);
+		div = div.replace('###album###', Amarok.Engine.currentTrack().album);
 				// convert to seconds
-        length = Amarok.Engine.currentTrack().length/1000;
-        minutes = Math.floor(length/60);
-        seconds = length-(minutes*60);
-        if(seconds.toString().length == 1)
-            seconds = '0'+seconds
-        div = div.replace('###minutes###', minutes);
-        div = div.replace('###seconds###', seconds);
-        div = div.replace('###coverimg###',
+		length = Amarok.Engine.currentTrack().length/1000;
+		minutes = Math.floor(length/60);
+		seconds = length-(minutes*60);
+		if(seconds.toString().length == 1) { seconds = '0'+seconds; }
+		div = div.replace('###minutes###', minutes);
+		div = div.replace('###seconds###', seconds);
+		div = div.replace('###coverimg###',
 		Amarok.Engine.currentTrack().imageUrl == '' ? '/img/no-cover.png' :
 			'/img/cover/current.png?t='+(new Date()).getTime());
 		
 		/**
-		 * Get lyrics from Amarok's DB
-		 */
+		* Get lyrics from Amarok's DB
+		*/
 		path = Amarok.Engine.currentTrack().path;
 		devicesQuery = Amarok.Collection.query('SELECT lastmountpoint FROM devices');
 		nbDevices = devicesQuery.length;
@@ -144,49 +149,38 @@ currentTrackDiv = function(path){
 		if ( lyricsQuery.length == 1) {
 			div = div.replace('<!--###lyrics###-->', lyricsQuery[0].trim() );
 		}
-    }
-    else {
+	}
+	else {
 		div += loadFile('/www/emptyTrack.html');
-    }
+	}
 	
 	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html');
+	response.append(div);
+	return response;
+}
+
+ratingDialog = function(path) {
+	response = new HandlerResponse();
+	div = loadFile('/www/ratingDialog.html');
+	
+	currentRating = Amarok.Engine.currentTrack().rating;
+	ratingButtons = '';
+	for(i=1 ; i<=10 ; i++){
+		ratingButtons += '<a class="rating-button" href="#" data-inline="true" data-role="button" data-rel="back" data-iconpos="right" data-icon="star" data-amarok-rating="'+i+'"';
+		ratingButtons += ( currentRating == i ? ' class="ui-btn-active"' : '' );
+		ratingButtons += '>'+i+'</a>';
+	}
+
+	div = div.replace('###title###', Amarok.Engine.currentTrack().title);
+	div = div.replace('###stars###', ratingButtons);
+	
     response.append(div);
     return response;
 }
 
-/*
-function getRatingHtml() {
-  var rating = currentTrack().rating, result = '<div>'
-  for (var i=1; i <= 10; i++) {
-    var star = rating >= i ? 'star' : 'star_3'
-    // The Dolphin browser for android won't trigger an onclick event on an image
-//     result += '<img src="/' + star + '.png" onclick="setRating(' + i + ')" />';
-    result += '<span onclick="setRating(' + i + '); return false;">' +
-              '<img src="/' + star + '.png" /></span>'
-    if (i == 5) result += '</div><div>';
-  }
-  return result + '</div>'
-}
-*/
-
 function currentTrack() {
-  return Amarok.Engine.currentTrack()
+  return Amarok.Engine.currentTrack();
 }
-
-/**
- *  Send div with info about the track currently playing.
- */
-/*
-function ratingDiv(path){
-    var track = currentTrack(),
-        newRating = parseInt(path.substring(path.lastIndexOf('/')+1));
-    if (track.rating == newRating) newRating = 0
-    track.rating = newRating
-    response = new HandlerResponse();    
-    response.append(getRatingHtml());
-    return response;
-}
-*/
 
 /**
  *  Send div for the current playlist.

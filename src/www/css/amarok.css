@@ -21,12 +21,18 @@ a {text-decoration: none;}
 	margin: 30px auto 0;
 }
 
-label {
-	display: block;
-    float: left;
-    font-weight: normal;
-    width: 5em;
+#current-track label.track-label {
+	display: inline-block;
+	margin: 0 2% 0 0;
+	vertical-align: top;
+	width: 20%;
+	font-weight: normal;
+	float: left;
 }
+#current-track .track-info {
+	display: inline-block;
+	width: 78%;
+} 
 
 .track-lyrics {
 	text-align: center;
@@ -54,6 +60,9 @@ label {
 #control-buttons .btn-center { text-align: center; }
 #control-buttons a { padding-left: 20%; padding-right: 20%; } 
 
+#track-rating header .ui-btn-inner {
+	top: 1px;
+}
 #all-artist-tracks .ui-btn-inner,
 #album-tracks .ui-btn-inner {
     left: -1px;

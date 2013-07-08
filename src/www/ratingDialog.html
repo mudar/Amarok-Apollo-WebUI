@@ -1,0 +1,41 @@
+<div data-role="dialog">
+	<header data-role="header" data-theme="b">
+		<h1>###title###</h1>
+
+	</header>
+
+	<div data-role="content" id="track-rating">
+		<div>###stars###</div>
+		<a href="/current-track" data-role="button" data-rel="back">Cancel</a>    
+	</div>
+
+<script>
+$(document).on('pageinit', function(){
+	$('#track-rating .rating-button').click(function() {
+		$.mobile.showPageLoadingMsg();
+		var btn = $(this);
+		var apiUrl = '/api/cmd/setRating/';
+
+		btn.toggleClass('ui-btn-active',true);
+
+		$.getJSON( apiUrl + btn.attr("data-amarok-rating") , function(data) {
+			var ratingHtml = 'Unknown!';
+			if ( typeof data['results']['rating'] != 'undefined' ) {
+				rating = data['results']['rating'];
+				if ( !isNaN( rating )) {
+					ratingHtml = rating + '&nbsp;star' + ( rating > 1 ? 's' : '');
+				}
+			}
+			$('#current-rating').html(ratingHtml);
+
+		$('#playlist li.ui-btn-active').removeClass('ui-btn-active');
+
+			btn.toggleClass('ui-btn-active',false);
+			
+			$.mobile.hidePageLoadingMsg();
+		});
+	});
+});
+</script>
+
+</div>

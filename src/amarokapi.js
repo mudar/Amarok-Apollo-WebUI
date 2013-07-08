@@ -236,6 +236,17 @@ cmdCollectionEnqueue = function(path) {
 	return response;
 }
 
+cmdSetRating = function(path){
+    var rating = parseInt(path.substring(path.lastIndexOf("/")+1));
+	if ( isNaN(rating) ) { rating = 0; }
+	
+	Amarok.Engine.currentTrack().rating = rating;
+	
+	response = new HandlerResponse(true);
+	response.append('{"status":"OK","cmd":"setRating","args":{"rating":'+rating+'},"results":{"rating":'+Amarok.Engine.currentTrack().rating+'}}');
+	return response;
+}
+
 getCollectionAllArtistsJSON = function(path){
     response = new HandlerResponse(true);
     artists = "";

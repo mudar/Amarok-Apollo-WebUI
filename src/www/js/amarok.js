@@ -2,7 +2,7 @@
 */
 
 togglePlayPauseIcon = function(button, data) {
-	if ( data == 'undefined' ) return;
+	if ( typeof data == 'undefined' ) return;
 	
 	if ( data['status'] == 'OK' ) {
 		newIcon = 'amarok-pause';
@@ -16,7 +16,7 @@ togglePlayPauseIcon = function(button, data) {
 }
 
 setEmptyPlaylist = function(data) {
-	if ( data == 'undefined' ) return;
+	if ( typeof data == 'undefined' ) return;
 	
 	if ( data['status'] == 'OK') {
 		$('#playlist ul').html('<li>Playlist is empty&hellip;</li>').listview('refresh');
@@ -25,7 +25,7 @@ setEmptyPlaylist = function(data) {
 }
 
 toggleCurrentTrack = function(button, data) {
-	if ( data == 'undefined' ) return;
+	if ( typeof data == 'undefined' ) return;
 	
 	if ( data['status'] == 'OK') {
 		$('#playlist li.ui-btn-active').removeClass('ui-btn-active');

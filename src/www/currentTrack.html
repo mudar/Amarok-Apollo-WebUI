@@ -4,29 +4,28 @@
 </header>
 
 <div data-role="content" >
-	<ul data-role="listview">
+	<ul data-role="listview" id="current-track">
 		<li>
-			<label>Artist</label>
-			<span>###artist###</span>
-		</li>
-		<li>
-			<label>Title</label>
-			<span>###title###</span>
+			<label class="track-label">Artist</label>
+			<span class="track-info">###artist###</span>
 		</li>
 		<li>
-			<label>Album</label>
-			<span>###album###</span>
+			<label class="track-label">Title</label>
+			<span class="track-info">###title###</span>
 		</li>
 		<li>
-			<label>Length</label>
-			<span>###minutes###:###seconds###</span>
+			<label class="track-label">Album</label>
+			<span class="track-info">###album###</span>
 		</li>
-<!-- 
-		<li class="row evaluation">
-			<label>Rating</label>
-			<span id="rating">###rating###</span>
+		<li>
+			<label class="track-label">Length</label>
+			<span class="track-info">###minutes###:###seconds###</span>
 		</li>
--->
+
+		<li><a href="/rate-me" data-rel="dialog">
+			<label class="track-label">Rating</label>
+			<span class="track-info" id="current-rating">###rating###</span></a>
+		</li>
 	</ul>
 
 	<div class="album-cover">
