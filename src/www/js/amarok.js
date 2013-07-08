@@ -52,6 +52,9 @@ var AmarokFooterEvents = (function () {
 						$.mobile.hidePageLoadingMsg();
 					},500);
 				}
+				else {
+					$.mobile.hidePageLoadingMsg();
+				}
 			}
 			else {
 				if ( page == '/playlist' ) {
