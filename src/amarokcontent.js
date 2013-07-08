@@ -166,8 +166,8 @@ ratingDialog = function(path) {
 	currentRating = Amarok.Engine.currentTrack().rating;
 	ratingButtons = '';
 	for(i=1 ; i<=10 ; i++){
-		ratingButtons += '<a class="rating-button" href="#" data-inline="true" data-role="button" data-rel="back" data-iconpos="right" data-icon="star" data-amarok-rating="'+i+'"';
-		ratingButtons += ( currentRating == i ? ' class="ui-btn-active"' : '' );
+		ratingButtons += '<a href="#" data-inline="true" data-role="button" data-rel="back" data-iconpos="right" data-icon="star" data-amarok-rating="'+i+'"';
+		ratingButtons += ' class="' + ( currentRating == i ? 'ui-btn-active' : 'rating-button' ) + '"';
 		ratingButtons += '>'+i+'</a>';
 	}
 
