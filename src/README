@@ -1,26 +1,24 @@
 ==Configuration==
 The web UI can be accessed with your web browser at the port specified in
-$HOME/.kde/share/apps/amarok/scripts/amarok-webui/conf.js (default is 8080).
+"Amarok Apollo WebUI" under the Settings menu. Default is 8084. Ex: 
+http://localhost:8084/
+http://192.168.1.10:8084/ (replace by your Amarok's machine IP).
 Per default you need to authentiate for accessing the UI; the credentials 
-can be set in conf.js as well (only basic HTTP auth, which is _not_ secure
-on untrusted connections). The default ist 
+can be set in the same configuration window. (only basic HTTP auth, which is 
+_not_ secure on untrusted connections). The default ist 
 	login=foo 
 	passwd=bar67#
 
 ==Copyright==
+(c) 2012 Mudar Noufal <mn@mudar.ca>
 (c) 2009 Johannes Wolter <jw@inutil.org>
 Some code of Ian Monroe <ian@monroe.nu> has been used as a starting point.
-
-The files in www/iui belong to iUI (User Interface Framework for Safari 
-development on iPhone). For details:
-* www/iui/LICENSE.txt
-* www/iui/NOTICE.txt
-* www/iui/README.txt
-* http://code.google.com/p/iui
 
 Contributor: Mudar Noufal <mn@mudar.ca>
 - Added support for a JSON API.
 - Refactoring to replace iUI by jQuery Mobile.
+- Forking Amarok WebUI by Johannes Wolter: http://github.com/jwchile/WebUI-for-Amarok
 - Libraries used:
+http://jquery.com/
 http://jquerymobile.com/
 http://github.com/ququplay/jquery-mobile-flat-ui-theme
