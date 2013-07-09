@@ -2,15 +2,16 @@
 Icon=get-hot-new-stuff-amarok
 Type=script
 ServiceTypes=KPluginInfo
-Name=WebUI for Amarok
+Name=Amarok Apollo WebUI
 
-Comment=A script that offers a (limited) web interface to amarok.
+Comment=Web and Android interface to rediscover your music with Amarok! Access it at http://localhost:8084/
 
-X-KDE-PluginInfo-Author=Johannes Wolter
-X-KDE-PluginInfo-Email=jw@inutil.org
-X-KDE-PluginInfo-Name=WebUI
-X-KDE-PluginInfo-Version=0.3
+X-KDE-PluginInfo-Author=Mudar Noufal
+X-KDE-PluginInfo-Email=mn@mudar.ca
+X-KDE-PluginInfo-Name=amarok-apollo
+X-KDE-PluginInfo-Website=https://github.com/mudar/Amarok-Apollo-WebUI
+X-KDE-PluginInfo-Version=1.0
 X-KDE-PluginInfo-Category=Generic
 X-KDE-PluginInfo-Depends=Amarok2.0
-X-KDE-PluginInfo-License=LGPL
-X-KDE-PluginInfo-EnabledByDefault=false
+X-KDE-PluginInfo-License=GPLv3
+X-KDE-PluginInfo-EnabledByDefault=true

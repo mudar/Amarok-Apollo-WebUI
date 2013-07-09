@@ -1,5 +1,6 @@
 /*
  *    Copyright (C) 2012 by Martin Hoeher <martin@rpdev.net>
+ *    Copyright (C) 2013 by Mudar Noufal <mn@mudar.ca>
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -14,6 +15,16 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+/**
+ * Default Configuration
+ */
+DEFAULT_CONFIG_PORT = 8084;
+DEFAULT_CONFIG_VOLUME_STEP = 5;
+DEFAULT_CONFIG_BASIC_AUTH = true;
+DEFAULT_CONFIG_USER = "foo";
+DEFAULT_CONFIG_PASSWD = "bar67#";
+DEFAULT_CONFIG_SUBNET = null; //"192.168.1.1/24";
 
 /*
  * Constants
@@ -86,13 +97,13 @@ Configuration.prototype.restoreSettings = function() {
  * This sets the default settings of the configuration.
  */
 Configuration.prototype.restoreDefaultSettings = function() {
-  this.port = 8080;
-  this.volumeStep = 5;
-  this.basicAuth = false;
-  this.user = "";
-  this.passwd = "";
-  this.externalCollection = "/media/BACKUP/";
-  this.restrictAccessToSubnet = null; //"192.168.178.1/24";
+  this.port = DEFAULT_CONFIG_PORT;
+  this.volumeStep = DEFAULT_CONFIG_VOLUME_STEP;
+  this.basicAuth = DEFAULT_CONFIG_BASIC_AUTH;
+  this.user = DEFAULT_CONFIG_USER;
+  this.passwd = DEFAULT_CONFIG_PASSWD;
+  this.externalCollection = "/media/";
+  this.restrictAccessToSubnet = DEFAULT_CONFIG_SUBNET;
 }
 
 /*
@@ -123,7 +134,7 @@ Configuration.prototype.configure = function() {
 Configuration.prototype.setupGui = function() {
   if ( !this.dialog ) {
     this.dialog = new QDialog();
-    this.dialog.windowTitle = "Amarok WebUI - Configuration";
+    this.dialog.windowTitle = "Amarok Apollo WebUI";
     this.dialog.layout = new QVBoxLayout( this.dialog );
     this.componentsLayout = new QFormLayout( this.dialog );
     this.dialog.layout.addLayout( this.componentsLayout );

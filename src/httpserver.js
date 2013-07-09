@@ -2,6 +2,7 @@
  *    Copyright (C) 2009 by Johannes Wolter <jw@inutil.org>
  *                          Ian Monroe <ian@monroe.nu>
  *    Copyright (C) 2012 by Martin Hoeher <martin@rpdev.net>
+ *    Copyright (C) 2013 by Mudar Noufal <mn@mudar.ca>
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
