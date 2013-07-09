@@ -12,7 +12,7 @@ This is an updated version of the popular [WebUI-for-Amarok][link_github_amarok_
 
 [![Screenshots - view details][img_screenshot_carousel]][link_github_screenshots]
 
-## Features\
+## Features
 * Playback remote control: play, pause, next, previous.
 * Volume control.
 * Current Track: Information, Cover, **Lyrics**, Rating.
