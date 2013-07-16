@@ -24,7 +24,6 @@ DEFAULT_CONFIG_VOLUME_STEP = 5;
 DEFAULT_CONFIG_BASIC_AUTH = true;
 DEFAULT_CONFIG_USER = "foo";
 DEFAULT_CONFIG_PASSWD = "bar67#";
-DEFAULT_CONFIG_SUBNET = null; //"192.168.1.1/24";
 
 /*
  * Constants
@@ -71,7 +70,6 @@ Configuration.prototype.saveSettings = function() {
   writeConfigV( "user", this.user );
   writeConfigV( "passwd", this.passwd );
   writeConfigV( "externalCollection", this.externalCollection );
-  writeConfigV( "restrictAccessToSubnet", this.restrictAccessToSubnet );
 }
 
 /*
@@ -88,7 +86,6 @@ Configuration.prototype.restoreSettings = function() {
   this.user = readConfigV( "user", this.user );
   this.passwd = readConfigV( "passwd", this.passwd );
   this.externalCollection = readConfigV( "externalCollection", this.externalCollection );
-  this.restrictAccessToSubnet = readConfigV( "restrictAccessToSubnet", this.restrictAccessToSubnet);
 }
 
 /*
@@ -103,7 +100,6 @@ Configuration.prototype.restoreDefaultSettings = function() {
   this.user = DEFAULT_CONFIG_USER;
   this.passwd = DEFAULT_CONFIG_PASSWD;
   this.externalCollection = "/media/";
-  this.restrictAccessToSubnet = DEFAULT_CONFIG_SUBNET;
 }
 
 /*
@@ -132,40 +128,47 @@ Configuration.prototype.configure = function() {
  * to let him configure the plugin.
  */
 Configuration.prototype.setupGui = function() {
-  if ( !this.dialog ) {
-    this.dialog = new QDialog();
-    this.dialog.windowTitle = "Amarok Apollo WebUI";
-    this.dialog.layout = new QVBoxLayout( this.dialog );
-    this.componentsLayout = new QFormLayout( this.dialog );
-    this.dialog.layout.addLayout( this.componentsLayout );
-    this.dialogButtons = new QDialogButtonBox( this.dialog );
-    this.dialog.layout.addWidget( this.dialogButtons, 0, 0 );
-    this.dialogButtons.addButton( QDialogButtonBox.Ok );
-    this.dialogButtons.addButton( QDialogButtonBox.Cancel );
-    this.dialogButtons.addButton( QDialogButtonBox.RestoreDefaults ).clicked.connect(
-      this, this.restoreAndSetDefaults );
-    this.dialogButtons.accepted.connect( this, this.acceptAndClose );
-    this.dialogButtons.rejected.connect( this, this.discardAndClose );
-    
-    this.portSpinBox = new QSpinBox( this.dialog );
-    this.portSpinBox.minimum = 1;
-    this.portSpinBox.maximum = 65535;
-    this.volumeStepSpinBox = new QSpinBox( this.dialog );
-    this.volumeStepSpinBox.minimum = 1;
-    this.volumeStepSpinBox.maximum = 100;
-    this.basicAuthCheckBox = new QCheckBox( this.dialog );
-    this.userLineEdit = new QLineEdit( this.dialog );
-    this.passwordLineEdit = new QLineEdit( this.dialog );
-    this.passwordLineEdit.echoMode = QLineEdit.Password;
-    this.restrictAccessToSubnetLineEdit = new QLineEdit( this.dialog );
-    
-    this.componentsLayout.addRow( "Port", this.portSpinBox );
-    this.componentsLayout.addRow( "Volume Step", this.volumeStepSpinBox );
-    this.componentsLayout.addRow( "Basic Auth", this.basicAuthCheckBox );
-    this.componentsLayout.addRow( "Username", this.userLineEdit );
-    this.componentsLayout.addRow( "Password", this.passwordLineEdit );
-    this.componentsLayout.addRow( "Restrict Access to Subnet", this.restrictAccessToSubnetLineEdit );
-  }
+	if ( !this.dialog ) {
+		this.dialog = new QDialog();
+		this.dialog.setContentsMargins(10, 10, 10, 0);
+		this.dialog.windowTitle = "Amarok Apollo WebUI";
+		this.dialog.layout = new QVBoxLayout( this.dialog );
+
+		this.urlLabel = new QLabel( "" );
+		this.dialog.layout.addWidget( this.urlLabel, 0, 0 );
+		this.urlLabel.setContentsMargins(0,0,0,15);
+
+		this.componentsLayout = new QFormLayout();
+		this.dialog.layout.addLayout( this.componentsLayout );
+		this.componentsLayout.setContentsMargins(0,0,0,15);
+		this.portSpinBox = new QSpinBox( this.dialog );
+		this.portSpinBox.minimum = 1;
+		this.portSpinBox.maximum = 65535;
+		this.volumeStepSpinBox = new QSpinBox( this.dialog );
+		this.volumeStepSpinBox.minimum = 1;
+		this.volumeStepSpinBox.maximum = 100;
+		this.basicAuthCheckBox = new QCheckBox( this.dialog );
+		this.basicAuthCheckBox.stateChanged.connect(this, this.toggleAuthentication);
+		this.userLineEdit = new QLineEdit( this.dialog );
+		this.passwordLineEdit = new QLineEdit( this.dialog );
+		this.passwordLineEdit.echoMode = QLineEdit.Password;
+		this.toggleAuthentication();
+
+		this.componentsLayout.addRow( "Port", this.portSpinBox );
+		this.componentsLayout.addRow( "Volume Step", this.volumeStepSpinBox );
+		this.componentsLayout.addRow( "Enable Authentication", this.basicAuthCheckBox );
+		this.componentsLayout.addRow( "Username", this.userLineEdit );
+		this.componentsLayout.addRow( "Password", this.passwordLineEdit );
+		
+		this.dialogButtons = new QDialogButtonBox( this.dialog );
+		this.dialog.layout.addWidget( this.dialogButtons, 0, 0 );
+		this.dialogButtons.addButton( QDialogButtonBox.Ok );
+		this.dialogButtons.addButton( QDialogButtonBox.Cancel );
+		this.dialogButtons.addButton( QDialogButtonBox.RestoreDefaults ).clicked.connect(this, this.restoreAndSetDefaults );
+
+		this.dialogButtons.accepted.connect( this, this.acceptAndClose );
+		this.dialogButtons.rejected.connect( this, this.discardAndClose );
+	}
 }
 
 /*
@@ -184,7 +187,18 @@ Configuration.prototype.setValues = function( config ) {
   this.basicAuthCheckBox.checked = config.basicAuth;
   this.userLineEdit.text = config.user;
   this.passwordLineEdit.text = config.passwd;
-  this.restrictAccessToSubnetLineEdit.text = config.restrictAccessToSubnet;
+  
+  ipAddress = getIpAddress();
+  if ( ipAddress == false ) {
+	this.urlLabel.text = "Configure Amarok Apollo WebUI";  
+  }
+  else {
+	this.urlLabel.text = 'Start using Amarok Apollo WebUI: <a href="http://' + ipAddress + ':' + config.port + '/">http://' + ipAddress + ':' + config.port + '/</a>';
+	this.urlLabel.textFormat = Qt.RichText;
+	this.urlLabel.textInteractionFlags = Qt.TextBrowserInteraction;
+	this.urlLabel.openExternalLinks = true;
+  }
+  
 }
 
 /*
@@ -192,6 +206,15 @@ Configuration.prototype.setValues = function( config ) {
  */
 Configuration.prototype.restoreAndSetDefaults = function() {
   this.setValues( new Configuration() );
+}
+
+/*
+ * Toggle enabled/disabled status based on checkbox
+ */
+Configuration.prototype.toggleAuthentication = function() {
+	var isEnabled = (this.basicAuthCheckBox.checkState() != Qt.Unchecked);
+	this.userLineEdit.enabled = isEnabled ;
+	this.passwordLineEdit.enabled = isEnabled ;
 }
 
 /*
@@ -209,7 +232,6 @@ Configuration.prototype.acceptAndClose = function() {
   this.basicAuth = this.basicAuthCheckBox.checked;
   this.user = this.userLineEdit.text;
   this.passwd = this.passwordLineEdit.text;
-  this.restrictAccessToSubnet = this.restrictAccessToSubnetLineEdit.text;
   this.saveSettings();
   this.dialog.accept();
 }

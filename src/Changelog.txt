@@ -1,4 +1,7 @@
-0.4 2013-07-05 By Mudar Noufal <mn@mudar.ca>
+1.1 2013-07-13 
+    * Fix case-sensitivity issues to display Collection
+    * Amarok configuration (QT UI) updates adding IP address and toggle enabled
+1.0 2013-07-05 By Mudar Noufal <mn@mudar.ca>
     * Replaced iUI by jQuery and jQuery Mobile.
     * UI changes to update the look & feel.
     * Added lyrics display to CurrentTrack.

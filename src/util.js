@@ -67,3 +67,25 @@ writeConfigV = function( key, value ) {
 jsonEscape = function(str) {
 	return str.replace("\\", "\\\\").replace(/["]/g, '\\"');
 }
+
+getIpAddress = function() {
+	allInterfaces = new QNetworkInterface.allInterfaces();
+	nbInterfaces = allInterfaces.length;
+// 	Amarok.debug("========================== QNetworkInterface::IsRunning = " + QNetworkInterface.IsRunning );
+	for ( i = 0 ; i < nbInterfaces ; i++ ) {
+		interface = allInterfaces[i];
+		if ( interface.hardwareAddress().toString() != '00:00:00:00:00:00' ) {
+			addressEntries = interface.addressEntries();
+			nbAddresses = addressEntries.length;
+			for ( j = 0 ; j < nbAddresses ; j++ ) {
+				ipAddress = addressEntries[j].ip().toString();
+				if ( ipAddress.indexOf("::") == -1 ) {
+					return ipAddress;
+// 					Amarok.debug("========================== hardwareAddress = " + interface.hardwareAddress() );
+// 					Amarok.debug("========================== IP Address # = " + ipAddress);
+				}
+			}
+		}
+	}
+	return false;
+}

@@ -6,5 +6,9 @@
 * Modify navigation in collection browsing for large collections. [Done]
 * Make UI more intuitive and appealing [Done]
 * "Push" notifications (http://en.wikipedia.org/wiki/Push_technology#Long_polling).
-* Configuration UI.
-
+* Configuration UI. [Updated. subnet is missing for QT issues]
+2013-07-13 Amarok 2.7 issues:
+* Display Collection on case-sensitive DB [Done]
+* Display Lyrics
+* Display certain Album Covers
+* Play Track from Collection (enqued but not played)

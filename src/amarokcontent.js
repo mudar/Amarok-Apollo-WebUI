@@ -236,7 +236,7 @@ collectionArtistsDiv = function(path){
 			arg = '#'
 		}
 		else if ( arg.length == 1 ) {
-			searchQuery = ' AND name LIKE "'+Amarok.Collection.escape(arg)+'%"';
+			searchQuery = ' AND name LIKE "'+Amarok.Collection.escape(arg)+'%" COLLATE utf8_general_ci ';
 			arg = arg.toUpperCase();
 		}
 		else {
@@ -248,7 +248,7 @@ collectionArtistsDiv = function(path){
     div = loadFile('/www/collection.html');
 	if ( searchQuery != '' ) {
 		artists = '';
-		artistsQuery = Amarok.Collection.query('SELECT a.name, a.id, COUNT(t.id) AS total FROM artists AS a LEFT JOIN tracks AS t ON a.id = t.artist WHERE 1 '+searchQuery+' GROUP BY a.id ORDER BY a.name');
+		artistsQuery = Amarok.Collection.query('SELECT a.name, a.id, COUNT(t.id) AS total FROM artists AS a LEFT JOIN tracks AS t ON a.id = t.artist WHERE 1 '+searchQuery+' GROUP BY a.id ORDER BY a.name COLLATE utf8_general_ci');
 		nbArtists = artistsQuery.length;
 
 		if ( nbArtists == 0 ) {
@@ -296,7 +296,7 @@ collectionArtistAlbumsDiv = function(path){
 		
 		albums = '<li><a href="/collection/artist/tracks/'+artistId+'">&ndash; All Tracks<span class="ui-li-count">'+tracksCount +'</span></a></li>';
 		
-		albumsQuery = Amarok.Collection.query('SELECT name, id, image FROM albums WHERE artist = '+artistId+' ORDER BY name;')
+		albumsQuery = Amarok.Collection.query('SELECT name, id, image FROM albums WHERE artist = '+artistId+' ORDER BY name COLLATE utf8_general_ci;');
 		nbAlbums = albumsQuery.length;
 		for(albumidx = 0; albumidx<nbAlbums ; albumidx++){
 			album = albumsQuery[albumidx++];
@@ -376,7 +376,7 @@ collectionAllArtistTracksDiv = function(path){
     artistId = parseInt(path.substring(path.lastIndexOf('/')+1));
 	artistQuery = Amarok.Collection.query('SELECT name FROM artists WHERE id = '+artistId+';');
 	artistName = artistQuery[0];
-	trackQuery = Amarok.Collection.query('SELECT t.id, t.title, a.id AS albumId, a.name AS albumName, a.image AS coverId FROM tracks AS t LEFT JOIN albums AS a ON a.id = t.album WHERE t.artist = '+artistId+' ORDER BY a.id , t.tracknumber;');
+	trackQuery = Amarok.Collection.query('SELECT t.id, t.title, a.id AS albumId, a.name AS albumName, a.image AS coverId FROM tracks AS t LEFT JOIN albums AS a ON a.id = t.album WHERE t.artist = '+artistId+' ORDER BY name COLLATE utf8_general_ci, a.id , t.tracknumber;');
 	
 	tracksDiv = '';
 	prevAlbum = '';

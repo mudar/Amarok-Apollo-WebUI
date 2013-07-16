@@ -21,7 +21,7 @@ Importer.include("util.js");
 Importer.include("fileio.js");
 
 
-// Amarok.stopScript("WebUI");Amarok.runScript("WebUI");
+// Amarok.stopScript("amarok-apollo");Amarok.runScript("amarok-apollo");
 
 getServerVersionJSON = function(path){
 	response = new HandlerResponse(true);

@@ -27,7 +27,7 @@ ENGINE_STATE_PAUSE = 1
 
 function printStackTrace( ex )
 {
-    var err = "There was an error in the Amarok WebUI plugin!\n\n";
+    var err = "There was an error in the Amarok Apollo WebUI script!\n\n";
 
     err += "Error: " + ex.toString() + "\n"
     for ( var member in ex ) {

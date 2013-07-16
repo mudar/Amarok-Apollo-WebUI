@@ -24,25 +24,37 @@ Importer.include("util.js");
 Importer.include("configuration.js");
 
 function HTTPServer( webui ){
-  this.webui = webui;
+	this.webui = webui;
+	// TODO: QT exceptions are not catched, crashing Amaroking!
+	/*
 	if(this.webui.configuration.restrictAccessToSubnet && this.webui.configuration.restrictAccessToSubnet.length > 0){
 		this.checkIPAddress = true;
+		Amarok.debug('================== ' + this.webui.configuration.restrictAccessToSubnet);
+		
 		try{
 			this.validSubnet = QHostAddress.parseSubnet(this.webui.configuration.restrictAccessToSubnet);
 		}catch( error ){
 			Amarok.alert("Invalid subnet!");
 		}
 	}
-  QTcpServer.call(this, null);
-  this.listen(new QHostAddress(QHostAddress.Any), this.webui.configuration.port);
-  if(!this.isListening()){
-      Amarok.alert("Unable to open on port "+this.webui.configuration.port+" for the web server.");
-  }
-  Amarok.Window.Statusbar.longMessage("<b>Successfully started WebUI!</b>  It can be accessed at port "+this.serverPort()+".");
-  this.newConnection.connect(this, this.newConnectionCallback);
-  this.requestHandlerRegistry = new Object();
-  this.pendingRequestHandlerTimer = new QTimer();
-  this.pendingRequestHandlerTimer.timeout.connect(this, this.handlePendingRequests);
+	*/
+	
+	QTcpServer.call(this, null);
+	this.listen(new QHostAddress(QHostAddress.Any), this.webui.configuration.port);
+	if(!this.isListening()){
+		Amarok.alert("Unable to open on port "+this.webui.configuration.port+" for the web server.");
+	}
+	else {
+		Amarok.Window.Statusbar.shortMessage("Successfully started Amarok Apollo WebUI <a href=\"http://localhost:"+this.serverPort()+"/\">http://localhost:"+this.serverPort()+"</a>");
+		Amarok.Window.OSD.setImage(new QImage(Amarok.Info.scriptPath()+"/icon.png"));
+		Amarok.Window.OSD.setText('Successfully started Amarok Apollo WebUI');
+		Amarok.Window.OSD.show();
+	}
+
+	this.newConnection.connect(this, this.newConnectionCallback);
+	this.requestHandlerRegistry = new Object();
+	this.pendingRequestHandlerTimer = new QTimer();
+	this.pendingRequestHandlerTimer.timeout.connect(this, this.handlePendingRequests);
 }
 
 HTTPServer.prototype = new QTcpServer();
@@ -142,7 +154,7 @@ HTTPServer.prototype.sendErrorMsg = function(socket, retCode, reasonPhrase, msg,
 HTTPServer.prototype.checkAuth = function(socket, header){
 	if (this.webui.configuration.basicAuth) {
 		if (header.value("Authorization").match("^Basic") != "Basic") {
-			this.sendErrorMsg(socket, 401, "Authorization Required", "<h3>401 Error</h3>Authorization Required!", [["WWW-Authenticate", 'Basic realm="WebUI for Amarok"']]);
+			this.sendErrorMsg(socket, 401, "Authorization Required", "<h3>401 Error</h3>Authorization Required!", [["WWW-Authenticate", 'Basic realm="Amarok Apollo WebUI"']]);
 			return false;
 			
 		}
@@ -150,7 +162,7 @@ HTTPServer.prototype.checkAuth = function(socket, header){
 			authStr = new QByteArray(this.webui.configuration.user + ":" + this.webui.configuration.passwd).toBase64();
 			authResponse = header.value("Authorization").substring(6);
 			if (authResponse != authStr) {
-				this.sendErrorMsg(socket, 401, "Authorization Required", "<h3>401 Error</h3>Authorization Required!", [["WWW-Authenticate", 'Basic realm="WebUI for Amarok"']]);
+				this.sendErrorMsg(socket, 401, "Authorization Required", "<h3>401 Error</h3>Authorization Required!", [["WWW-Authenticate", 'Basic realm="Amarok Apollo WebUI"']]);
 				return false;
 			}
 		}
