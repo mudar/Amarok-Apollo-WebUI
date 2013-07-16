@@ -194,7 +194,12 @@ cmdCollectionPlayByTrackId = function(path){
 	if ( trackURL.length > 0 && trackURL2.length > 0 ) {
 		media = trackURL2[0] + trackURL[0].substring(1);
 		Amarok.Playlist.addMedia(new QUrl('file://'+ media ));
-		Amarok.Playlist.playByIndex(Amarok.Playlist.totalTrackCount()-1);
+		var timerObject = new QObject();
+		timerObject.event = function(qevent) {
+			Amarok.Playlist.playByIndex(Amarok.Playlist.totalTrackCount()-1);
+			this.killTimer(timerObject.timerID);
+		}
+		timerObject.timerID = timerObject.startTimer(250);	// 250 milliseconds
 		media = jsonEscape(media);
 	}
 
