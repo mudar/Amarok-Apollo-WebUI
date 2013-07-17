@@ -9,6 +9,6 @@
 * Configuration UI. [Updated. subnet is missing for QT issues]
 2013-07-13 Amarok 2.7 issues:
 * Display Collection on case-sensitive DB [Done]
-* Display Lyrics
+* Display Lyrics [Done, needs testing with Win-Amarok]
 * Display certain Album Covers
-* Play Track from Collection (enqued but not played)
+* Play Track from Collection (enqued but not played) [Done]

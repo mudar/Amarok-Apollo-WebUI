@@ -141,11 +141,25 @@ currentTrackDiv = function(path){
 		path = Amarok.Engine.currentTrack().path;
 		devicesQuery = Amarok.Collection.query('SELECT lastmountpoint FROM devices');
 		nbDevices = devicesQuery.length;
-		lyricsSql = 'SELECT lyrics FROM lyrics WHERE 0 ';
-		for(i=0; i<nbDevices; i++){
+		
+		var lyricsSql = '';
+		
+		// From Amarok 2.5 Changelog: Database structure (lyrics table) was updated...
+		if ( compareVersions(Amarok.Info.version() , "2.5.0" ) ) {
+			lyricsSql = 'SELECT lyrics FROM lyrics AS l JOIN urls AS u ON l.url = u.id WHERE 0 ';
+			for(i=0; i<nbDevices; i++){
 // TODO: check compatibility with Win-Amarok
-			lyricsSql += ' OR url = "'+Amarok.Collection.escape(path.replace(devicesQuery[i]+'/','./'))+'"';
+				lyricsSql += ' OR u.rpath = "'+Amarok.Collection.escape(path.replace(devicesQuery[i]+'/','./'))+'"';
+			}
 		}
+		else {
+			lyricsSql = 'SELECT lyrics FROM lyrics WHERE 0 ';
+			for(i=0; i<nbDevices; i++){
+// TODO: check compatibility with Win-Amarok
+				lyricsSql += ' OR url = "'+Amarok.Collection.escape(path.replace(devicesQuery[i]+'/','./'))+'"';
+			}
+		}
+
 		lyricsQuery = Amarok.Collection.query(lyricsSql);
 		if ( lyricsQuery.length == 1) {
 			div = div.replace('<!--###lyrics###-->', lyricsQuery[0].trim() );
@@ -198,7 +212,7 @@ playlistDiv = function(path){
 		tracks = '';
 		randColor = -1;	// initialize variable. Will be incremented to 0 for the first coverless album
 		prevArtist = '';
-		for(trackidx=0; trackidx<Amarok.Playlist.totalTrackCount(); trackidx=trackidx+1){
+		for(trackidx=0; trackidx<nbTracks; trackidx=trackidx+1){
 			t = Amarok.Playlist.trackAt(trackidx);
 			tracks += '<li class="track'+(current == trackidx ? ' ui-btn-active' : '' )+'"><a href="#" data-amarok-track-id="'+trackidx+'"><img ';
 			if ( t.imageUrl != '' ) {

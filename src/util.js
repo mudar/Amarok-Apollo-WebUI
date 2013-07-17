@@ -89,3 +89,38 @@ getIpAddress = function() {
 	}
 	return false;
 }
+
+/**
+ * Compare software versions
+ * Returns true if 'installed' (considered as a JRE version string) is
+ * greater than or equal to 'required' (again, a JRE version string).
+ * 
+ * http://stackoverflow.com/a/6832670/535915
+* Taken from http://java.com/js/deployJava.js:
+ */
+compareVersions = function (installed, required) {
+
+	var a = installed.split('.');
+	var b = required.split('.');
+
+	for (var i = 0; i < a.length; ++i) {
+		a[i] = Number(a[i]);
+	}
+	for (var i = 0; i < b.length; ++i) {
+		b[i] = Number(b[i]);
+	}
+	if (a.length == 2) {
+		a[2] = 0;
+	}
+
+	if (a[0] > b[0]) return true;
+	if (a[0] < b[0]) return false;
+
+	if (a[1] > b[1]) return true;
+	if (a[1] < b[1]) return false;
+
+	if (a[2] > b[2]) return true;
+	if (a[2] < b[2]) return false;
+
+	return true;
+}
