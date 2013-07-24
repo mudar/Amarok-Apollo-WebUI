@@ -81,23 +81,30 @@ albumCover = function(path){
 	imageId = Amarok.Collection.query('SELECT image FROM albums WHERE id = '+Amarok.Collection.escape(albumId)+' AND image IS NOT NULL;');
 	if ( imageId.length == 0 ) { response.setReturnCode(404, "Not Found"); return response; }
 	
-	imagePath = Amarok.Collection.query('SELECT path, rpath FROM images LEFT JOIN urls ON images.path = urls.uniqueid WHERE images.id = '+Amarok.Collection.escape(imageId[0]));
-	/**
-	 * TWEAK: for images with path LIKE 'amarok-sqltrackuid%', the track is added temporarily to the playlist,
-	 * then we get the playlist's last item cover before removing the temp item!
-	 * Amarok doesn't provide acces to imageUrl except for currentTrack and Playlist tracks...
-	 */
+	imagePath = Amarok.Collection.query('SELECT i.path, u.rpath, d.lastmountpoint FROM images AS i LEFT JOIN urls AS u ON i.path = u.uniqueid LEFT JOIN devices AS d ON d.id = u.deviceid WHERE i.id = '+Amarok.Collection.escape(imageId[0]));
+	
 	if ( imagePath[0].substring( 0, 18) == 'amarok-sqltrackuid' ) {
-		Amarok.Playlist.addMedia(new QUrl('file://'+ '/home' + imagePath[1].substring(1)));
-		response =  playlistTrackCover( '/img/cover/playlist/' + (isThumb ? 'thumb/' : '') + (Amarok.Playlist.totalTrackCount() -1)+'.png?t='+(new Date()).getTime());
-		Amarok.Playlist.removeByIndex(Amarok.Playlist.totalTrackCount() - 1);
+		/**
+		 * For images with path LIKE 'amarok-sqltrackuid%', we need to extract the cover
+		 * image from the ID3v2 tag.
+		 */
+		pixmap = GetID3.getPixmap(imagePath[2] + imagePath[1].substring(1));
+		if ( pixmap.isNull() ) {
+			pixmap = new QPixmap();
+			noCover = loadFile("/www/img/no-cover.png",false);
+			if ( !noCover.isEmpty() ) {
+				pixmap.loadFromData(noCover);
+			}
+		}
 	}
 	else {
-		response.setMimeType('image/png');
+		/**
+		 * If no image is included in the ID3v2 tag, we get the image directly form its filesystem path.
+		 */
 		pixmap = new QPixmap(imagePath[0], '', Qt.AutoColor);
-		response.append(pixmapToPNG(pixmap, (isThumb ? THUMB_SIZE : false)));
 	}
-
+	response.setMimeType('image/png');
+	response.append(pixmapToPNG(pixmap, (isThumb ? THUMB_SIZE : false)));
 	response.enableCache();
 
     return response;

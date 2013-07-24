@@ -58,7 +58,7 @@ var AmarokFooterEvents = (function () {
 			}
 			else {
 				if ( page == '/playlist' ) {
-					var selected = null;
+					var selected = [];
 					if ( button.attr( 'data-amarok-cmd' ) == 'prev' ) {
 						selected = $('#playlist .ui-btn-active').prev();
 					}

@@ -49,6 +49,9 @@ fileHandler = function(path){
         }else if( pathFileInfo.completeSuffix() == "js" ){
             response.setMimeType("text/javascript");
 			response.enableCache();
+        }else if( pathFileInfo.completeSuffix() == "jpg" ){
+            response.setMimeType("image/jpeg");
+			response.enableCache();
         }else if( pathFileInfo.completeSuffix() == "png" ){
             response.setMimeType("image/png");
 			response.enableCache();
@@ -74,11 +77,16 @@ fileHandler = function(path){
 /*
  * Load a file and return the contents as string.
  */
-loadFile = function(path){
-    data = new QByteArray();
+loadFile = function(path,isText){
+	isText = ( typeof isText == 'undefined' ) || isText;
     file = new QFile(Amarok.Info.scriptPath()+path);
     file.open(QIODevice.ReadOnly);
-    r = file.readAll().toString();
+    r = file.readAll();
     file.close();
-    return r;
+	if ( isText ) {
+		return r.toString();
+	}
+	else {
+		return r;
+	}
 }
