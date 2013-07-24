@@ -31,8 +31,8 @@ currentTrackCover = function(path){
     engineState = Amarok.Engine.engineState();
     if(engineState == ENGINE_STATE_PAUSE || engineState == ENGINE_STATE_PLAY){
 		if ( Amarok.Engine.currentTrack().imageUrl != '' ) {
-			response.setMimeType('image/png');
-			response.append(pixmapToPNG(Amarok.Engine.currentTrack().imagePixmap(),false));
+			response.setMimeType('image/jpeg');
+			response.append(pixmapToJPEG(Amarok.Engine.currentTrack().imagePixmap(),false));
 		}
 		else {
 			response.setReturnCode(404, "Not Found");
@@ -53,16 +53,16 @@ currentTrackCover = function(path){
 playlistTrackCover = function(path){
 	response = new HandlerResponse();
 	
-    trackIdx = parseInt(path.substring(path.lastIndexOf('/')+1, path.indexOf('.png')));
+    trackIdx = parseInt(path.substring(path.lastIndexOf('/')+1, path.indexOf('.jpg')));
 	isThumb = (path.indexOf('thumb/') != -1);
 	
 	if ( Amarok.Playlist.trackAt(trackIdx).imageUrl == '' ) {
 		response.setReturnCode(404, "Not Found");
 	}
 	else {
-		response.setMimeType('image/png');
+		response.setMimeType('image/jpeg');
 		pixmap = Amarok.Playlist.trackAt(trackIdx).imagePixmap();
-		response.append(pixmapToPNG(pixmap, ( isThumb ? THUMB_SIZE : false)));
+		response.append(pixmapToJPEG(pixmap, ( isThumb ? THUMB_SIZE : false)));
 	}
     return response;
 }
@@ -103,8 +103,8 @@ albumCover = function(path){
 		 */
 		pixmap = new QPixmap(imagePath[0], '', Qt.AutoColor);
 	}
-	response.setMimeType('image/png');
-	response.append(pixmapToPNG(pixmap, (isThumb ? THUMB_SIZE : false)));
+	response.setMimeType('image/jpeg');
+	response.append(pixmapToJPEG(pixmap, (isThumb ? THUMB_SIZE : false)));
 	response.enableCache();
 
     return response;
@@ -140,7 +140,7 @@ currentTrackDiv = function(path){
 		div = div.replace('###seconds###', seconds);
 		div = div.replace('###coverimg###',
 		Amarok.Engine.currentTrack().imageUrl == '' ? '/img/no-cover.png' :
-			'/img/cover/current.png?t='+(new Date()).getTime());
+			'/img/cover/current.jpg?t='+(new Date()).getTime());
 		
 		/**
 		* Get lyrics from Amarok's DB
@@ -223,7 +223,7 @@ playlistDiv = function(path){
 			t = Amarok.Playlist.trackAt(trackidx);
 			tracks += '<li class="track'+(current == trackidx ? ' ui-btn-active' : '' )+'"><a href="#" data-amarok-track-id="'+trackidx+'"><img ';
 			if ( t.imageUrl != '' ) {
-				tracks += 'src="/img/cover/playlist/thumb/'+trackidx+'.png?t='+(new Date()).getTime() +'"'
+				tracks += 'src="/img/cover/playlist/thumb/'+trackidx+'.jpg?t='+(new Date()).getTime() +'"'
 			}
 			else {
 				if ( prevArtist != t.artist ) {
@@ -326,7 +326,7 @@ collectionArtistAlbumsDiv = function(path){
 			if (album.length>0){
 				albums += '<li><a href="/collection/artist/album/'+albumId+'">';
 				if ( !isNaN( parseInt(albumCover) ) ) {
-					albums += '<img src="/img/cover/collection/thumb/'+albumId+'.png" alt="" />';
+					albums += '<img src="/img/cover/collection/thumb/'+albumId+'.jpg" alt="" />';
 				}
 				else {
 					albums += '<img src="/img/no-cover.png" alt="" />';
@@ -382,7 +382,7 @@ collectionAlbumDiv = function(path){
 	
 	div = div.replace('###coverimg###',
 		coverId == '' ? '/img/no-cover.png' :
-		'/img/cover/collection/'+albumId+'.png' );
+		'/img/cover/collection/'+albumId+'.jpg' );
 	
 	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html');
     response.append(div);
@@ -413,7 +413,7 @@ collectionAllArtistTracksDiv = function(path){
 		
 		if (  albumName != prevAlbum) {
 			tracksDiv += '<li data-role="list-divider"><img '+(coverId == '' ? 'src="/img/no-cover.png" class="no-cover"' :
-		'src="/img/cover/collection/thumb/'+albumId + '.png"')+' alt="" /><h2>'+albumName+'</h2></li>'+ LINE_BREAK;
+		'src="/img/cover/collection/thumb/'+albumId + '.jpg"')+' alt="" /><h2>'+albumName+'</h2></li>'+ LINE_BREAK;
 			prevAlbum = albumName ;
 		}
 		

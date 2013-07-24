@@ -29,18 +29,13 @@ fileHandler = function(path){
         path = "/index.html";
     }
     canonicalRootDir = new QFileInfo(Amarok.Info.scriptPath()+"/www").canonicalFilePath();
-// 	Amarok.debug(Amarok.Info.scriptPath()+"/www"+path);
     pathFileInfo = new QFileInfo(Amarok.Info.scriptPath()+"/www"+path);
     if(pathFileInfo.canonicalFilePath().indexOf(canonicalRootDir) != 0){
-//         Amarok.debug("Forbidden!");
-// 		Amarok.debug(pathFileInfo.canonicalFilePath());
-// 		Amarok.debug(canonicalRootDir);
         response.append("403 Error: Forbidden!");
         response.setMimeType("text/plain");
         response.setReturnCode(403, "Forbidden");
         return response;
     }
-//     Amarok.debug("File: "+pathFileInfo.canonicalFilePath());
     file = new QFile(pathFileInfo.canonicalFilePath());
     if(file.open(QIODevice.ReadOnly)){
         if( pathFileInfo.completeSuffix() == "css" ){
@@ -66,7 +61,7 @@ fileHandler = function(path){
         file.close();
         return response;
     }else{
-//         Amarok.debug("File not found!");
+//      Amarok.debug("File not found!");
         response.append("404 Error: File not found!");
         response.setReturnCode(404, "Not Found");
         response.setMimeType("text/plain");

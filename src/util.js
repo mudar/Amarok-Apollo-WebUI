@@ -31,17 +31,17 @@ QByteArray.prototype.toString = function(){
  * @param {QPixmap} pixmap
  * @param {int} dimension
  */
-pixmapToPNG = function(pixmap, dimension){
+pixmapToJPEG = function(pixmap, dimension){
     data = new QByteArray();
 	if ( pixmap.isNull() ) { return data; }
 	
     buffer = new QBuffer(data);
     buffer.open(QIODevice.WriteOnly);
 	if ( dimension != false ) {
-		pixmap.scaledToWidth(dimension, Qt.SmoothTransformation).save(buffer, "PNG");
+		pixmap.scaledToWidth(dimension, Qt.SmoothTransformation).save(buffer, "JPEG");
 	}
 	else {
-		pixmap.save(buffer, "PNG");
+		pixmap.save(buffer, "JPEG");
 	}
 	buffer.close();
     return data;
