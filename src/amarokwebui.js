@@ -60,6 +60,7 @@ AmarokWebUI.prototype.startService = function() {
   this.http.registerHandler("/rate-me", ratingDialog);
   this.http.registerHandler("/playlist", playlistDiv);
   this.http.registerHandler("/collection/artists", collectionArtistsDiv);
+  this.http.registerHandler("/collection/genres", collectionGenresDiv);
   this.http.registerHandler("/collection/artist/album", collectionAlbumDiv);
   this.http.registerHandler("/collection/artist/tracks", collectionAllArtistTracksDiv);
   this.http.registerHandler("/collection/artist", collectionArtistAlbumsDiv);

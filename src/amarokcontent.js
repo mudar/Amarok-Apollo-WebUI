@@ -243,33 +243,85 @@ playlistDiv = function(path){
     return response;
 }
 
+
+
 /**
- *  Send div with all artists in the collection.
+ *  Send div with all Artists in the collection, filtered alphabetically
  */
 collectionArtistsDiv = function(path){
-	var searchQuery = '';
+	response = new HandlerResponse();
+
+	var queryFilter = '';
 	var argIndex = path.lastIndexOf('/');
 	var arg = '';
 	if ( argIndex > 0 ) {
 		arg = path.substring(argIndex+1, argIndex+2);
 		if ( arg == '0' ) {
-			searchQuery = ' AND name NOT REGEXP "^[[:alpha:]]"';
+			queryFilter = ' AND name NOT REGEXP "^[[:alpha:]]"';
 			arg = '#'
 		}
 		else if ( arg.length == 1 ) {
-			searchQuery = ' AND name LIKE "'+Amarok.Collection.escape(arg)+'%" COLLATE utf8_general_ci ';
+			queryFilter = ' AND name LIKE "'+Amarok.Collection.escape(arg)+'%" COLLATE utf8_general_ci ';
 			arg = arg.toUpperCase();
 		}
 		else {
 			arg = '@#!';
 		}
 	}
+	
+	searchQuery = 'SELECT a.name, a.id, COUNT(t.id) AS total FROM artists AS a JOIN tracks AS t ON a.id = t.artist WHERE 1 '+queryFilter+' GROUP BY a.id ORDER BY a.name COLLATE utf8_general_ci';
+	
+	div = collectionFilteredDiv(searchQuery, false);
+	div = div.replace('<!-- ###title### -->', 'Artists &ndash; '+arg);
+	
+	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html');
+    response.append(div);
+	
+    return response;
+}
 
-    response = new HandlerResponse();
+/**
+ *  Send div with all Artists in the collection, filtered by Genre
+ */
+collectionGenresDiv = function(path){
+	response = new HandlerResponse();
+	
+	var queryFilter = '';
+	var argIndex = path.lastIndexOf('/');
+	var genreId = 0;
+	var genreName = 'Unknown';
+	if ( ( argIndex > 0 ) && ( argIndex +1 < path.length ) ) {
+		genreId = path.substring(argIndex+1);
+		queryFilter = ' AND g.id = ' + Amarok.Collection.escape(genreId);
+		
+		genreQuery = Amarok.Collection.query( 'SELECT name FROM genres WHERE id = ' + Amarok.Collection.escape(genreId) );
+		if ( genreQuery.length != 0 ) {
+			if ( genreName.length > 0 ) { genreName = genreQuery[0]; }
+		}
+		else {
+			genreName = '@#!';
+		}
+	}
+	
+	searchQuery = 'SELECT a.name, a.id, COUNT(t.id) AS total FROM artists AS a JOIN tracks AS t ON a.id = t.artist JOIN genres AS g ON g.id = t.genre WHERE 1 '+queryFilter+' GROUP BY a.id ORDER BY a.name COLLATE utf8_general_ci';
+		
+	div = collectionFilteredDiv(searchQuery, genreId);
+	div = div.replace('<!-- ###title### -->', genreName);
+	
+	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html');
+    response.append(div);
+    return response;
+}
+
+/**
+ * Get Artists, filtered alphabetically or by genre
+ */
+collectionFilteredDiv = function(searchQuery, genreId){
+
     div = loadFile('/www/collection.html');
 	if ( searchQuery != '' ) {
 		artists = '';
-		artistsQuery = Amarok.Collection.query('SELECT a.name, a.id, COUNT(t.id) AS total FROM artists AS a LEFT JOIN tracks AS t ON a.id = t.artist WHERE 1 '+searchQuery+' GROUP BY a.id ORDER BY a.name COLLATE utf8_general_ci');
+		artistsQuery = Amarok.Collection.query(searchQuery);
 		nbArtists = artistsQuery.length;
 
 		if ( nbArtists == 0 ) {
@@ -281,7 +333,7 @@ collectionArtistsDiv = function(path){
 				artistId = artistsQuery[artistidx++];
 				tracksCount = artistsQuery[artistidx];
 				if (artist.length>0){
-					artists += '<li><a href="/collection/artist/'+artistId+'">';
+					artists += '<li><a href="/collection/artist/'+artistId+''+(genreId > 0 ? '/genre/' + genreId : '' )+'">';
 					artists += artist;
 					if ( tracksCount >= 10 ) {
 						artists += '<span class="ui-li-count">'+tracksCount +'</span>';
@@ -294,37 +346,49 @@ collectionArtistsDiv = function(path){
 	else {
 		artists = '<li>Collection index error!</li>';
 	}
-	div = div.replace('<!-- ###query###-->', ' &ndash; '+arg);
 	div = div.replace('###artists###', artists);
-	
-	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html');
-    response.append(div);
-    return response;
+
+    return div;
 }
 
 /**
  * Send div with all albums from one artist.
  */
 collectionArtistAlbumsDiv = function(path){
+	indexOfGenre = path.indexOf( '/genre/' );
+	genreId = 0;
+	if ( indexOfGenre != -1 ) {
+		genreId = parseInt(path.substring(indexOfGenre+7));
+		path = path.substring(0,indexOfGenre);
+	}
+
     artistId = parseInt(path.substring(path.lastIndexOf('/')+1));
 	response = new HandlerResponse();
     div = loadFile('/www/collectionArtistAlbums.html');
 
-	artistQuery = Amarok.Collection.query('SELECT a.name, COUNT(t.id) AS total FROM artists AS a LEFT JOIN tracks AS t ON t.artist = a.id WHERE a.id = '+artistId+';')
-	if ( artistQuery.length == 2 ) {
+	artistQuery = Amarok.Collection.query('SELECT a.name, COUNT(t.id) AS total, g.name AS genre FROM artists AS a JOIN tracks AS t ON t.artist = a.id JOIN genres AS g ON t.genre = g.id WHERE a.id = ' + Amarok.Collection.escape(artistId) + (genreId > 0 ? ' AND g.id = ' + Amarok.Collection.escape(genreId): '' ) + ' GROUP BY a.id');
+	Amarok.debug('SELECT a.name, COUNT(t.id) AS total, g.name AS genre FROM artists AS a JOIN tracks AS t ON t.artist = a.id JOIN genres AS g ON t.genre = g.id WHERE a.id = ' + Amarok.Collection.escape(artistId) + (genreId > 0 ? ' AND g.id = ' + Amarok.Collection.escape(genreId): '' ) + ' GROUP BY a.id');
+	if ( artistQuery.length > 0 ) {
 		artist = artistQuery[0];
 		tracksCount = artistQuery[1];
+		genre = artistQuery[2];
 		
-		albums = '<li><a href="/collection/artist/tracks/'+artistId+'">&ndash; All Tracks<span class="ui-li-count">'+tracksCount +'</span></a></li>';
+		albums = '<li><a href="/collection/artist/tracks/' + artistId + (genreId > 0 ? '/genre/'+genreId : '' ) + '">&ndash; All ' + (genreId > 0 ? genre + ' ' : '' ) + 'Tracks<span class="ui-li-count">'+tracksCount +'</span></a></li>';
 		
-		albumsQuery = Amarok.Collection.query('SELECT name, id, image FROM albums WHERE artist = '+artistId+' ORDER BY name COLLATE utf8_general_ci;');
+		if ( genreId == 0 ) {
+			albumsQuery = Amarok.Collection.query('SELECT name, id, image FROM albums WHERE artist = '+artistId+' ORDER BY name COLLATE utf8_general_ci;');
+		}
+		else {
+			albumsQuery = Amarok.Collection.query('SELECT a.name, a.id, a.image FROM albums AS a JOIN tracks AS t ON a.id = t.album WHERE a.artist = '+artistId+' AND t.genre = ' + Amarok.Collection.escape(genreId) + ' GROUP BY a.id ORDER BY a.name COLLATE utf8_general_ci');
+		}
+		
 		nbAlbums = albumsQuery.length;
 		for(albumidx = 0; albumidx<nbAlbums ; albumidx++){
 			album = albumsQuery[albumidx++];
 			albumId = albumsQuery[albumidx++];
 			albumCover = albumsQuery[albumidx];
 			if (album.length>0){
-				albums += '<li><a href="/collection/artist/album/'+albumId+'">';
+				albums += '<li><a href="/collection/artist/album/'+albumId+(genreId > 0 ? '/genre/'+genreId : '' )+'">';
 				if ( !isNaN( parseInt(albumCover) ) ) {
 					albums += '<img src="/img/cover/collection/thumb/'+albumId+'.jpg" alt="" />';
 				}
@@ -335,7 +399,7 @@ collectionArtistAlbumsDiv = function(path){
 			}
 		}
 
-		div = div.replace('###artist###', artist);
+		div = div.replace('###artist###', artist + (genreId > 0 ? ' &ndash; '+  genre : '' ));
 		div = div.replace('###content###', albums);
 	}
 	else {
@@ -354,6 +418,14 @@ collectionArtistAlbumsDiv = function(path){
  * -Replace current playlist with tracks from the album. 
  */
 collectionAlbumDiv = function(path){
+	indexOfGenre = path.indexOf( '/genre/' );
+	genreId = 0;
+	if ( indexOfGenre != -1 ) {
+		genreId = parseInt(path.substring(indexOfGenre+7));
+		path = path.substring(0,indexOfGenre);
+	}
+	genreName = 'Unknown';
+	
     albumId = parseInt(path.substring(path.lastIndexOf('/')+1));
 	
 	albumQuery = Amarok.Collection.query('SELECT name, artist, image FROM albums WHERE id = '+albumId+';');
@@ -364,20 +436,43 @@ collectionAlbumDiv = function(path){
 	artistQuery = Amarok.Collection.query('SELECT name FROM artists WHERE id = '+artistId+';');
 	artistName = artistQuery[0];
 	
-	trackQuery = Amarok.Collection.query('SELECT id , title FROM tracks WHERE album = '+albumId+' ORDER BY tracknumber , createdate;');
+	if ( genreId > 0 ) {
+		trackQuery = Amarok.Collection.query('SELECT t.id, t.title, g.id AS genreId, g.name AS genre FROM tracks AS t JOIN genres AS g ON g.id = t.genre WHERE album = '+albumId+' ORDER BY tracknumber, createdate;');
+	}
+	else {
+		trackQuery = Amarok.Collection.query('SELECT id, title FROM tracks WHERE album = '+albumId+' ORDER BY tracknumber, createdate;');
+	}
+
 	tracksDiv = '';
 	nbTracks = trackQuery.length;
 	for(trackidx = 0; trackidx < nbTracks; trackidx++){
 		trackId = trackQuery[trackidx++];
 		trackName = trackQuery[trackidx];
-		tracksDiv += '<li class="track"><a class="track-add-play" href="#" data-amarok-track-id="'+trackId+'">'+trackName+'</a><a class="track-add" href="#" data-amarok-track-id="'+trackId+'">Play</a></li>'+ LINE_BREAK;
+		tracksDiv += '<li class="track"><a class="track-add-play" href="#" data-amarok-track-id="'+trackId+'">';
+		if ( genreId > 0 ) {
+			trackidx++;
+			currentGenreId = trackQuery[trackidx++];
+			currentGenre = trackQuery[trackidx];
+			if ( currentGenreId != genreId ) {
+				tracksDiv += '<h3 class="light-weight">' + trackName + '</h3>';
+				tracksDiv += '<p>' + currentGenre + '</p>';
+			}
+			else {
+				tracksDiv += '<h3>' + trackName + '</h3>';
+				genreName = currentGenre;
+			}
+		}
+		else {
+			tracksDiv += '<h3>' + trackName + '</h3>';
+		}
+		tracksDiv += '</a><a class="track-add" href="#" data-amarok-track-id="'+trackId+'">Play</a></li>'+ LINE_BREAK;
 	}
 	
 	response = new HandlerResponse();
     div = loadFile('/www/collectionAlbum.html');
 	
 	div = div.replace('Album<!-- ###album###-->', albumName);
-	div = div.replace('###artist###', artistName);
+	div = div.replace('###artist###', artistName + ( genreId > 0 ? ' &ndash; ' + genreName : '' ) );
 	div = div.replace('###tracks###', tracksDiv);	
 	
 	div = div.replace('###coverimg###',
@@ -394,10 +489,17 @@ collectionAlbumDiv = function(path){
  * the options see "collectionAlbumDiv"
  */
 collectionAllArtistTracksDiv = function(path){
+	indexOfGenre = path.indexOf( '/genre/' );
+	genreId = 0;
+	if ( indexOfGenre != -1 ) {
+		genreId = parseInt(path.substring(indexOfGenre+7));
+		path = path.substring(0,indexOfGenre);
+	}
+	
     artistId = parseInt(path.substring(path.lastIndexOf('/')+1));
 	artistQuery = Amarok.Collection.query('SELECT name FROM artists WHERE id = '+artistId+';');
 	artistName = artistQuery[0];
-	trackQuery = Amarok.Collection.query('SELECT t.id, t.title, a.id AS albumId, a.name AS albumName, a.image AS coverId FROM tracks AS t LEFT JOIN albums AS a ON a.id = t.album WHERE t.artist = '+artistId+' ORDER BY name COLLATE utf8_general_ci, a.id , t.tracknumber;');
+	trackQuery = Amarok.Collection.query('SELECT t.id, t.title, a.id AS albumId, a.name AS albumName, a.image AS coverId FROM tracks AS t LEFT JOIN albums AS a ON a.id = t.album WHERE t.artist = '+artistId+(genreId > 0 ? ' AND t.genre = ' + Amarok.Collection.escape(genreId) : '')+' ORDER BY name COLLATE utf8_general_ci, a.id , t.tracknumber;');
 	
 	tracksDiv = '';
 	prevAlbum = '';
@@ -417,7 +519,7 @@ collectionAllArtistTracksDiv = function(path){
 			prevAlbum = albumName ;
 		}
 		
-		tracksDiv += '<li class="track" data-filtertext="'+jsonEscape(albumName+ ' ' + trackName)+'"><a class="track-add-play" href="#" data-amarok-track-id="'+trackId+'">'+trackName+'</a><a class="track-add" href="#" data-amarok-track-id="'+trackId+'">Play</a></li>'+ LINE_BREAK;
+		tracksDiv += '<li class="track" data-filtertext="'+jsonEscape(albumName+ ' ' + trackName)+'"><a class="track-add-play" href="#" data-amarok-track-id="'+trackId+'"><h3>'+trackName+'</h3></a><a class="track-add" href="#" data-amarok-track-id="'+trackId+'">Play</a></li>'+ LINE_BREAK;
 	}
 
 	response = new HandlerResponse();
@@ -433,7 +535,20 @@ collectionAllArtistTracksDiv = function(path){
 
 collectionIndex = function(path) {
     response = new HandlerResponse();
-	div = loadFile('/www/header.html') + loadFile('/www/collectionIndex.html') + loadFile('/www/footer.html');	
+	div = loadFile('/www/collectionIndex.html');	
+	
+	genreDiv = '';
+	if ( Amarok.Collection.totalGenres() > 0 ) {
+		genresQuery = Amarok.Collection.query('SELECT g.id, g.name FROM genres AS g JOIN tracks AS t ON g.id = t.genre WHERE TRIM(g.name) != "" GROUP BY g.id ORDER BY g.name COLLATE utf8_general_ci');
+		nbGenres = genresQuery.length;
+		for(genreidx=0; genreidx<nbGenres; genreidx++){
+			genreDiv += '<a data-inline="true" data-role="button" href="/collection/genres/'+genresQuery[genreidx++]+'">'+genresQuery[genreidx]+'</a>';
+		}
+	}
+	div = div.replace( '###genres###' , genreDiv);
+	
+	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html');	
+	
 	response.append(div);
     return response;
 }

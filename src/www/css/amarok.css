@@ -1,5 +1,7 @@
 a {text-decoration: none;}
 
+.light-weight { font-weight: normal; }
+
 #home-buttons {
 	min-width: 200px;
 	max-width: 400px;
@@ -88,6 +90,7 @@ a {text-decoration: none;}
 .color6{background:#F1C40F;}
 .color7{background:#2ECC71;}
 
+.ui-icon-amarok-genre ,
 .ui-icon-amarok-play ,
 .ui-icon-amarok-pause, 
 .ui-icon-amarok-next ,
@@ -106,8 +109,10 @@ a {text-decoration: none;}
 .ui-icon-amarok-next { background-position: -108px -1px; }
 .ui-icon-amarok-volume-down { background-position: -144px -1px; }
 .ui-icon-amarok-volume-up { background-position: -180px -1px; }
+.ui-icon-amarok-genre { background-position: -216px -1px; background-color: rgba(0, 0, 0, 0.4);}
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+	.ui-icon-amarok-genre ,
 	.ui-icon-amarok-play ,
 	.ui-icon-amarok-pause, 
 	.ui-icon-amarok-next ,
@@ -115,7 +120,7 @@ a {text-decoration: none;}
 	.ui-icon-amarok-volume-up ,
 	.ui-icon-amarok-volume-down { 
 		background-image: url(/img/icons-36-white-amarok.png); 
-		background-size: 198px 18px;
+		background-size: 234px 18px;
 	}
 	
 	.ui-icon-amarok-collection { 
