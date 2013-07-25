@@ -12,3 +12,7 @@
 * Display Lyrics [Done, needs testing with Win-Amarok]
 * Display certain Album Covers
 * Play Track from Collection (enqued but not played) [Done]
+2013-07-25
+* Allow Collection browsing by Genre
+* Use ID3v2 tags to display album cover in collection
+* Replace PNG by JPEG to reduce filesize
