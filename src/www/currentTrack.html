@@ -1,29 +1,29 @@
 <header data-role="header" data-position="fixed">
-	<a href="/" data-icon="home" class="ui-btn-left">Home</a>
-	<h1>Current Track</h1>
+	<a href="/" data-icon="home" class="ui-btn-left" data-amarok-lang="btn_home">&nbsp;</a>
+	<h1 data-amarok-lang="title_current">&nbsp;</h1>
 </header>
 
 <div data-role="content" >
 	<ul data-role="listview" id="current-track">
 		<li>
-			<label class="track-label">Artist</label>
+			<label class="track-label" data-amarok-lang="label_artist">&nbsp;</label>
 			<span class="track-info">###artist###</span>
 		</li>
 		<li>
-			<label class="track-label">Title</label>
+			<label class="track-label" data-amarok-lang="label_title">&nbsp;</label>
 			<span class="track-info">###title###</span>
 		</li>
 		<li>
-			<label class="track-label">Album</label>
+			<label class="track-label" data-amarok-lang="label_album">&nbsp;</label>
 			<span class="track-info">###album###</span>
 		</li>
 		<li>
-			<label class="track-label">Length</label>
+			<label class="track-label" data-amarok-lang="label_length">&nbsp;</label>
 			<span class="track-info">###minutes###:###seconds###</span>
 		</li>
 
 		<li><a href="/rate-me" data-rel="dialog">
-			<label class="track-label">Rating</label>
+			<label class="track-label" data-amarok-lang="label_rating">&nbsp;</label>
 			<span class="track-info" id="current-rating">###rating###</span></a>
 		</li>
 	</ul>

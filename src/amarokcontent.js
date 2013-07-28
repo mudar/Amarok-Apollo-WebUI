@@ -124,8 +124,8 @@ currentTrackDiv = function(path){
 		var rating = Amarok.Engine.currentTrack().rating;
 
 		if ( rating == 0 ) { rating = '&mdash;'; }
-		else if ( rating == 1 ) { rating = '1&nbsp;star'; }
-		else { rating = rating + '&nbsp;stars'; }
+		else if ( rating == 1 ) { rating = '1&nbsp;<span data-amarok-lang="label_rating_star">&nbsp;</span>'; }
+		else { rating = rating + '&nbsp;<span data-amarok-lang="label_rating_stars">&nbsp;</span>'; }
 
 		div = div.replace('###rating###', rating );
 		div = div.replace('###artist###', Amarok.Engine.currentTrack().artist);
@@ -212,7 +212,7 @@ playlistDiv = function(path){
 	div = loadFile('/www/playlist.html');
 	nbTracks = Amarok.Playlist.totalTrackCount();
 	if ( nbTracks == 0 ) {
-		div = div.replace('###tracks###', '<li class="empty">Playlist is empty&hellip;</li>');
+		div = div.replace('###tracks###', '<li class="empty" data-amarok-lang="error_playlist_empty">&nbsp;</li>');
 	}
 	else {
 		current = Amarok.Playlist.activeIndex();
@@ -272,7 +272,7 @@ collectionArtistsDiv = function(path){
 	searchQuery = 'SELECT a.name, a.id, COUNT(t.id) AS total FROM artists AS a JOIN tracks AS t ON a.id = t.artist WHERE 1 '+queryFilter+' GROUP BY a.id ORDER BY a.name COLLATE utf8_general_ci';
 	
 	div = collectionFilteredDiv(searchQuery, false);
-	div = div.replace('<!-- ###title### -->', 'Artists &ndash; '+arg);
+	div = div.replace('<!-- ###title### -->', '<span data-amarok-lang="title_artists">Artists</span> &ndash; '+arg);
 	
 	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html');
     response.append(div);
@@ -325,7 +325,7 @@ collectionFilteredDiv = function(searchQuery, genreId){
 		nbArtists = artistsQuery.length;
 
 		if ( nbArtists == 0 ) {
-			artists = '<li>No artists found&hellip;</li>';
+			artists = '<li data-amarok-lang="error_artists_none">&nbsp;</li>';
 		}
 		else {
 			for(artistidx=0; artistidx<nbArtists; artistidx++){		 
@@ -373,7 +373,9 @@ collectionArtistAlbumsDiv = function(path){
 		tracksCount = artistQuery[1];
 		genre = artistQuery[2];
 		
-		albums = '<li><a href="/collection/artist/tracks/' + artistId + (genreId > 0 ? '/genre/'+genreId : '' ) + '">&ndash; All ' + (genreId > 0 ? genre + ' ' : '' ) + 'Tracks<span class="ui-li-count">'+tracksCount +'</span></a></li>';
+		if ( genre.length == '' ) { genre = '<span data-amarok-lang="title_genre_unknown">&nbsp;</span>'; }
+		
+		albums = '<li><a href="/collection/artist/tracks/' + artistId + (genreId > 0 ? '/genre/'+genreId : '' ) + '">&ndash; <span data-amarok-lang="artist_all_tracks">&nbsp;</span>' + (genreId > 0 ? ' / ' + genre : '' ) + '<span class="ui-li-count">'+tracksCount +'</span></a></li>';
 		
 		if ( genreId == 0 ) {
 			albumsQuery = Amarok.Collection.query('SELECT name, id, image FROM albums WHERE artist = '+artistId+' ORDER BY name COLLATE utf8_general_ci;');
@@ -403,8 +405,8 @@ collectionArtistAlbumsDiv = function(path){
 		div = div.replace('###content###', albums);
 	}
 	else {
-		div = div.replace('###artist###', 'Artist &ndash; @#!');
-		div = div.replace('###content###', '<li>Artist not found!</li>');
+		div = div.replace('###artist###', '<span data-amarok-lang="title_artist">Artist</span> &ndash; @#!');
+		div = div.replace('###content###', '<li data-amarok-lang="error_artist_not_found">&nbsp;</li>');
 	}
 
 	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html');
@@ -424,7 +426,7 @@ collectionAlbumDiv = function(path){
 		genreId = parseInt(path.substring(indexOfGenre+7));
 		path = path.substring(0,indexOfGenre);
 	}
-	genreName = 'Unknown';
+	genreName = '<span data-amarok-lang="title_genre_unknown">&nbsp;</span>';
 	
     albumId = parseInt(path.substring(path.lastIndexOf('/')+1));
 	
@@ -465,13 +467,13 @@ collectionAlbumDiv = function(path){
 		else {
 			tracksDiv += '<h3>' + trackName + '</h3>';
 		}
-		tracksDiv += '</a><a class="track-add" href="#" data-amarok-track-id="'+trackId+'">Play</a></li>'+ LINE_BREAK;
+		tracksDiv += '</a><a class="track-add" href="#" data-amarok-track-id="'+trackId+'" data-amarok-lang="btn_add">&nbsp;</a></li>'+ LINE_BREAK;
 	}
 	
 	response = new HandlerResponse();
     div = loadFile('/www/collectionAlbum.html');
 	
-	div = div.replace('Album<!-- ###album###-->', albumName);
+	div = div.replace('###album###', albumName);
 	div = div.replace('###artist###', artistName + ( genreId > 0 ? ' &ndash; ' + genreName : '' ) );
 	div = div.replace('###tracks###', tracksDiv);	
 	
@@ -511,15 +513,15 @@ collectionAllArtistTracksDiv = function(path){
 		albumName = trackQuery[trackidx++];
 		coverId = trackQuery[trackidx];
 		
-		if ( albumName == '' ) { albumName = 'Unknown Album'; }
+		if ( albumName == '' ) { albumName = 'Unknown'; }
 		
 		if (  albumName != prevAlbum) {
 			tracksDiv += '<li data-role="list-divider"><img '+(coverId == '' ? 'src="/img/no-cover.png" class="no-cover"' :
-		'src="/img/cover/collection/thumb/'+albumId + '.jpg"')+' alt="" /><h2>'+albumName+'</h2></li>'+ LINE_BREAK;
+		'src="/img/cover/collection/thumb/'+albumId + '.jpg"')+' alt="" /><h2>'+ ( albumName == 'Unknown' ? '<span data-amarok-lang="artist_album_unknown">&nbsp;</span>' : '' ) +'</h2></li>'+ LINE_BREAK;
 			prevAlbum = albumName ;
 		}
 		
-		tracksDiv += '<li class="track" data-filtertext="'+jsonEscape(albumName+ ' ' + trackName)+'"><a class="track-add-play" href="#" data-amarok-track-id="'+trackId+'"><h3>'+trackName+'</h3></a><a class="track-add" href="#" data-amarok-track-id="'+trackId+'">Play</a></li>'+ LINE_BREAK;
+		tracksDiv += '<li class="track" data-filtertext="'+jsonEscape(albumName+ ' ' + trackName)+'"><a class="track-add-play" href="#" data-amarok-track-id="'+trackId+'"><h3>'+trackName+'</h3></a><a class="track-add" href="#" data-amarok-track-id="'+trackId+'" data-amarok-lang="btn_add">&nbsp;</a></li>'+ LINE_BREAK;
 	}
 
 	response = new HandlerResponse();

@@ -1,6 +1,19 @@
 /*! Amarok WebUI scripts
 */
 
+AmarokI18N = function() {
+	$('[data-amarok-lang]').each(function() {
+		if ( $(this).hasClass('ui-btn') ) {
+			lg = lang[$(this).attr('data-amarok-lang')];
+			$(this).find('.ui-btn-text').html(lg);
+			$(this).attr('title',lg);
+		}
+		else {
+			$(this).html(lang[$(this).attr('data-amarok-lang')]);
+		}
+	});
+}
+
 togglePlayPauseIcon = function(button, data) {
 	if ( typeof data == 'undefined' ) return;
 	
@@ -19,7 +32,7 @@ setEmptyPlaylist = function(data) {
 	if ( typeof data == 'undefined' ) return;
 	
 	if ( data['status'] == 'OK') {
-		$('#playlist ul').html('<li>Playlist is empty&hellip;</li>').listview('refresh');
+		$('#playlist ul').html('<li class="empty">'+lang['error_playlist_empty']+'</li>').listview('refresh');
 		$('#clear-playlist').toggleClass('ui-disabled' , true);
 	}
 }

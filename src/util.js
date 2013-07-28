@@ -291,7 +291,7 @@ GetID3 = new function() {
 
 					}
 
-					frameFlags = this.BigEndian2Int(frameHeader.substring( 8, 10));
+					frameFlags = this.BigEndian2Int(frameHeader.substring( 8, 10),0);
 				}
 
 				if (((id3v2MajorVersion == 2) && (frameName == "\x00\x00\x00")) || (frameName == "\x00\x00\x00\x00")) {
@@ -500,11 +500,8 @@ GetID3 = new function() {
 		}
 
 		for ($i = 0; $i < $bytewordlen; $i++) {
-			if (Boolean($synchsafe)) { // disregard MSB, effectively 7-bit bytes
-				$intvalue += ($byteword.charCodeAt($i) & 0x7F) * Math.pow(2, ($bytewordlen - 1 - $i) * 7);
-			} else {
-				$intvalue += $byteword.charCodeAt($i) * Math.pow(256, ($bytewordlen - 1 - $i));
-			}
+			// disregard MSB, effectively 7-bit bytes
+			$intvalue += ($byteword.charCodeAt($i) & 0x7F) * Math.pow(2, ($bytewordlen - 1 - $i) * 7);
 		}
 
 		return parseInt($intvalue);

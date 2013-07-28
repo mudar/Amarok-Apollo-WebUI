@@ -1,16 +1,17 @@
 <div data-role="dialog">
 	<header data-role="header" data-theme="b">
-		<h1>Rating: ###title###</h1>
+		<h1><span data-amarok-lang="title_rating">&nbsp;</span> ###title###</h1>
 
 	</header>
 
 	<div data-role="content" id="track-rating">
 		<div>###stars###</div>
-		<a href="/current-track" data-role="button" data-rel="back">Cancel</a>    
+		<a href="/current-track" data-role="button" data-rel="back" data-amarok-lang="btn_cancel">&nbsp;</a>    
 	</div>
 
 <script>
 $(document).on('pageinit', function(){
+	AmarokI18N();
 	$('#track-rating .rating-button').click(function() {
 		$.mobile.showPageLoadingMsg();
 		var btn = $(this);
@@ -23,7 +24,7 @@ $(document).on('pageinit', function(){
 			if ( typeof data['results']['rating'] != 'undefined' ) {
 				rating = data['results']['rating'];
 				if ( !isNaN( rating )) {
-					ratingHtml = rating + '&nbsp;star' + ( rating > 1 ? 's' : '');
+					ratingHtml = rating + '&nbsp;' + ( rating > 1 ? lang['label_rating_stars'] : lang['label_rating_star'] );
 				}
 			}
 			$('#current-rating').html(ratingHtml);
