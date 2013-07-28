@@ -1,44 +1,11 @@
-<!DOCTYPE html> 
-<html> 
-<head> 
-	<meta charset="UTF-8" />
-	<title>Amarok Apollo WebUI</title> 
-	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<link rel="stylesheet"  href="/css/jqm-flatui-amarok-min.css">
-</head> 
-<body>
+<header data-role="header" data-position="fixed">
+	<h1>Amarok Apollo WebUI</h1>
+</header>
 
-	<div data-role="page" id="wrapper-page">
-
-		<header data-role="header" data-position="fixed">
-			<h1>Amarok Apollo WebUI</h1>
-		</header>
-
-		<div data-role="content">	
-			<div id="home-buttons">
-				<a href="/current-track" data-role="button"><img src="/img/icon-home-current-track.png" alt="Amarok | Rediscover Your Music!"/><span data-amarok-lang="btn_home_current">&nbsp;</span></a>
-				<a href="/playlist" data-role="button" ><img src="/img/icon-home-playlist.png" alt="" /><span data-amarok-lang="btn_home_playlist">&nbsp;</span></a>
-				<a href="/collection" data-role="button" ><img src="/img/icon-home-collection.png" alt="" /><span data-amarok-lang="btn_home_collection">&nbsp;</span></a>
-			</div>
-		</div>
-
-		<footer data-role="footer" data-position="fixed"> 
-			<div class="ui-grid-d" id="control-buttons">
-				<div class="ui-block-a btn-center"><a href="#" data-amarok-cmd="prev" data-role="button" data-theme="b" data-iconpos="notext" data-inline="true" data-icon="amarok-prev" data-amarok-lang="btn_prev">&nbsp;</a></div>
-				<div class="ui-block-b btn-center"><a href="#" id="btn-play-pause" data-amarok-cmd="playPause" data-role="button" data-theme="b" data-iconpos="notext" data-inline="true" data-icon="amarok-play" data-amarok-lang="btn_play">&nbsp;</a></div>
-				<div class="ui-block-c btn-center"><a href="#" data-amarok-cmd="next" data-role="button" data-theme="b" data-iconpos="notext" data-inline="true" data-icon="amarok-next" data-amarok-lang="btn_next">&nbsp;</a></div>
-				<div class="ui-block-d btn-center"><a href="#" data-amarok-cmd="decreaseVolume" data-role="button" data-theme="b" data-iconpos="notext" data-inline="true" data-icon="amarok-volume-down" data-amarok-lang="btn_volume_down">&nbsp;</a></div>
-				<div class="ui-block-e btn-center"><a href="#" data-amarok-cmd="increaseVolume" data-role="button" data-theme="b" data-iconpos="notext" data-inline="true" data-icon="amarok-volume-up" data-amarok-lang="btn_volume_up">&nbsp;</a></div>
-			</div> 
-		</footer>
+<div data-role="content">	
+	<div id="home-buttons">
+		<a href="/current-track" data-role="button"><img src="/img/icon-home-current-track.png" alt="Amarok | Rediscover Your Music!"/><span data-amarok-lang="btn_home_current">&nbsp;</span></a>
+		<a href="/playlist" data-role="button" ><img src="/img/icon-home-playlist.png" alt="" /><span data-amarok-lang="btn_home_playlist">&nbsp;</span></a>
+		<a href="/collection" data-role="button" ><img src="/img/icon-home-collection.png" alt="" /><span data-amarok-lang="btn_home_collection">&nbsp;</span></a>
 	</div>
-
-<script src="/js/lang/en.js"></script>
-<script src="/js/jquery-jqm-amarok-min.js"></script>
-<script>
-var AmarokPageEvents = (function () {});
-$(document).off('pageshow', '#wrapper-page').on('pageshow', '#wrapper-page', function() {AmarokFooterEvents();AmarokPageEvents();AmarokI18N();} );
-</script>
-
-</body>
-</html>
+</div>

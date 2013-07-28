@@ -26,7 +26,7 @@ Importer.include("httpserver.js");
 fileHandler = function(path){
     response = new HandlerResponse();
     if(path === "/" || path === ""){
-        path = "/index.html";
+        return homepageDiv();
     }
     canonicalRootDir = new QFileInfo(Amarok.Info.scriptPath()+"/www").canonicalFilePath();
     pathFileInfo = new QFileInfo(Amarok.Info.scriptPath()+"/www"+path);

@@ -19,6 +19,7 @@
 /**
  * Default Configuration
  */
+DEFAULT_CONFIG_LANG = 'en';
 DEFAULT_CONFIG_PORT = 8084;
 DEFAULT_CONFIG_VOLUME_STEP = 5;
 DEFAULT_CONFIG_BASIC_AUTH = true;
@@ -64,6 +65,7 @@ getVolumeStep = function(){
  * Saves the configuration
  */
 Configuration.prototype.saveSettings = function() {
+  writeConfigV( "lang", this.lang );
   writeConfigV( "port", this.port );
   writeConfigV( "volumeStep", this.volumeStep );
   writeConfigV( "basicAuth", this.basicAuth );
@@ -80,6 +82,7 @@ Configuration.prototype.saveSettings = function() {
  * value instead.
  */
 Configuration.prototype.restoreSettings = function() {
+  this.lang = readConfigV( "lang", this.lang );
   this.port = readConfigV( "port", this.port );
   this.volumeStep = readConfigV( "volumeStep", this.volumeStep );
   this.basicAuth = readConfigV( "basicAuth", this.basicAuth );
@@ -94,6 +97,7 @@ Configuration.prototype.restoreSettings = function() {
  * This sets the default settings of the configuration.
  */
 Configuration.prototype.restoreDefaultSettings = function() {
+  this.lang = DEFAULT_CONFIG_LANG;
   this.port = DEFAULT_CONFIG_PORT;
   this.volumeStep = DEFAULT_CONFIG_VOLUME_STEP;
   this.basicAuth = DEFAULT_CONFIG_BASIC_AUTH;
@@ -141,6 +145,17 @@ Configuration.prototype.setupGui = function() {
 		this.componentsLayout = new QFormLayout();
 		this.dialog.layout.addLayout( this.componentsLayout );
 		this.componentsLayout.setContentsMargins(0,0,0,15);
+
+		this.langComboBox = new QComboBox( this.dialog );
+		this.langComboBox.addItem('Brazilian Portuguese','pt_BR');
+		this.langComboBox.addItem('English','en');
+		this.langComboBox.addItem('French','fr');
+		this.langComboBox.addItem('German','de');
+		this.langComboBox.addItem('Italian','it');
+		this.langComboBox.addItem('Portuguese','pt');
+		this.langComboBox.addItem('Russian','ru');
+		this.langComboBox.addItem('Spanish','es');
+
 		this.portSpinBox = new QSpinBox( this.dialog );
 		this.portSpinBox.minimum = 1;
 		this.portSpinBox.maximum = 65535;
@@ -154,6 +169,7 @@ Configuration.prototype.setupGui = function() {
 		this.passwordLineEdit.echoMode = QLineEdit.Password;
 		this.toggleAuthentication();
 
+		this.componentsLayout.addRow( "Language", this.langComboBox );
 		this.componentsLayout.addRow( "Port", this.portSpinBox );
 		this.componentsLayout.addRow( "Volume Step", this.volumeStepSpinBox );
 		this.componentsLayout.addRow( "Enable Authentication", this.basicAuthCheckBox );
@@ -182,6 +198,7 @@ Configuration.prototype.setValues = function( config ) {
   if ( !config ) {
     config = this;
   }
+  this.langComboBox.setCurrentIndex(this.langComboBox.findData(config.lang));
   this.portSpinBox.value = config.port;
   this.volumeStepSpinBox.value = config.volumeStep;
   this.basicAuthCheckBox.checked = config.basicAuth;
@@ -227,6 +244,7 @@ Configuration.prototype.toggleAuthentication = function() {
  * TODO: Check input for validity
  */
 Configuration.prototype.acceptAndClose = function() {
+  this.lang = this.langComboBox.itemData(this.langComboBox.currentIndex);
   this.port = this.portSpinBox.value;
   this.volumeStep = this.volumeStepSpinBox.value;
   this.basicAuth = this.basicAuthCheckBox.checked;

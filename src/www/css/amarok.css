@@ -58,6 +58,7 @@ a {text-decoration: none;}
 	padding-left: 0;
 	padding-right: 0;
 }
+#genres-index { text-align: center; }
 
 #control-buttons .btn-center { text-align: center; }
 #control-buttons a { padding-left: 20%; padding-right: 20%; } 

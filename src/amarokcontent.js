@@ -176,7 +176,7 @@ currentTrackDiv = function(path){
 		div += loadFile('/www/emptyTrack.html');
 	}
 	
-	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html');
+	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html').replace('###language###',readConfigV('lang',DEFAULT_CONFIG_LANG));
 	response.append(div);
 	return response;
 }
@@ -238,7 +238,7 @@ playlistDiv = function(path){
 		}
 		div = div.replace('###tracks###', tracks);
 	}
-	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html');
+	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html').replace('###language###',readConfigV('lang',DEFAULT_CONFIG_LANG));
     response.append(div);
     return response;
 }
@@ -274,7 +274,7 @@ collectionArtistsDiv = function(path){
 	div = collectionFilteredDiv(searchQuery, false);
 	div = div.replace('<!-- ###title### -->', '<span data-amarok-lang="title_artists">Artists</span> &ndash; '+arg);
 	
-	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html');
+	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html').replace('###language###',readConfigV('lang',DEFAULT_CONFIG_LANG));
     response.append(div);
 	
     return response;
@@ -308,7 +308,7 @@ collectionGenresDiv = function(path){
 	div = collectionFilteredDiv(searchQuery, genreId);
 	div = div.replace('<!-- ###title### -->', genreName);
 	
-	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html');
+	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html').replace('###language###',readConfigV('lang',DEFAULT_CONFIG_LANG));
     response.append(div);
     return response;
 }
@@ -409,7 +409,7 @@ collectionArtistAlbumsDiv = function(path){
 		div = div.replace('###content###', '<li data-amarok-lang="error_artist_not_found">&nbsp;</li>');
 	}
 
-	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html');
+	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html').replace('###language###',readConfigV('lang',DEFAULT_CONFIG_LANG));
     response.append(div);
     return response;
 }
@@ -481,7 +481,7 @@ collectionAlbumDiv = function(path){
 		coverId == '' ? '/img/no-cover.png' :
 		'/img/cover/collection/'+albumId+'.jpg' );
 	
-	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html');
+	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html').replace('###language###',readConfigV('lang',DEFAULT_CONFIG_LANG));
     response.append(div);
     return response;
 }
@@ -529,7 +529,7 @@ collectionAllArtistTracksDiv = function(path){
 
 	div = div.replace('###artist###', artistName);
 	div = div.replace('###tracks###', tracksDiv);	
-	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html');
+	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html').replace('###language###',readConfigV('lang',DEFAULT_CONFIG_LANG));
 
     response.append(div);
     return response;
@@ -549,7 +549,16 @@ collectionIndex = function(path) {
 	}
 	div = div.replace( '###genres###' , genreDiv);
 	
-	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html');	
+	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html').replace('###language###',readConfigV('lang',DEFAULT_CONFIG_LANG));
+	
+	response.append(div);
+    return response;
+}
+
+homepageDiv = function(path) {
+    response = new HandlerResponse();
+	div = loadFile('/www/index.html');
+	div = loadFile('/www/header.html') + div + loadFile('/www/footer.html').replace('###language###',readConfigV('lang',DEFAULT_CONFIG_LANG));
 	
 	response.append(div);
     return response;
