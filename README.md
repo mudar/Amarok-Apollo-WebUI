@@ -22,6 +22,7 @@ This is an updated version of the popular [WebUI-for-Amarok][link_github_amarok_
 * Browse Artist Albums or All-Tracks.
 * Add Album or Tracks to Playlist, individually or by batch.
 * Elegant and modern FlatUI design!
+* **Multi-langugage** support: English, Español, Français, Deutsch, etc.
 
 ## Wiki
 * [How to install][link_github_installation]
@@ -72,7 +73,7 @@ Wikipedia excerpt:
 [img_logo_amarok]: http://www.mudar.ca/amarok-apollo/400px-AmarokLogo.png
 [img_github]: http://www.mudar.ca/amarok-apollo/logo-amarok-apollo.png
 [img_screenshot_carousel]: http://www.mudar.ca/amarok-apollo/captures-carousel.png
-[link_github]: http://github.com/mudar/Amarok-Apollo-WebUI
+[link_github]: http://mudar.github.io/Amarok-Apollo-WebUI
 [link_github_installation]: https://github.com/mudar/Amarok-Apollo-WebUI/wiki/How-to-Install
 [link_github_screenshots]: https://github.com/mudar/Amarok-Apollo-WebUI/wiki/Screen-shots
 [link_github_missing_features]: https://github.com/mudar/Amarok-Apollo-WebUI/wiki/Missing-Features

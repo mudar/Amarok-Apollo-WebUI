@@ -1,5 +1,8 @@
- /*
+/*
  *    Copyright (C) 2013 by Mudar Noufal <mn@mudar.ca>
+ * 
+ *    Based on Amarok's .PO translation files, by the KDE Localization project 
+ *    http://i18n.kde.org/
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
