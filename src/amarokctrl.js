@@ -95,6 +95,11 @@ replacePlaylistWithAllArtistTrack = function(path){
 	addAllTracksFromArtistToPlaylist(path);
 }
 
+removeByIndex = function(index){
+	Amarok.Playlist.removeByIndex(index);
+	return new HandlerResponse();
+}
+
 clearPlaylist = function(path){
 	Amarok.Playlist.clearPlaylist();
 	return new HandlerResponse();

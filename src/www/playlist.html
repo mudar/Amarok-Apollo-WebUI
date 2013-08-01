@@ -5,13 +5,18 @@
 </header>
 
 <div id="playlist" data-role="content" >
-	<ul data-role="listview" data-inset="false">
+	<ul data-role="listview" class="touch"  data-inset="false" data-split-icon="delete">
 ###tracks###
 	</ul>
 </div>
 
 <script>
 var AmarokPageEvents = (function () {
+
+	if ( $('#playing').length != 0 ) {
+		$('html, body').animate({scrollTop: $('#playing').prev().offset().top},"fast");
+	}
+
 	$('#clear-playlist').toggleClass('ui-disabled' , $('#playlist li:first-child').hasClass('empty') );
 
 	$('#clear-playlist').click(function() {
@@ -25,7 +30,7 @@ var AmarokPageEvents = (function () {
 		});
 	});
 
-	$('#playlist .track a').click(function() {
+	$('#playlist .track a.ui-link-inherit').click(function() {
 		$.mobile.showPageLoadingMsg();
 		var parent = $(this).parents('li');
 		$.getJSON( '/api/cmd/playByIndex/'+ $(this).attr("data-amarok-track-id") , function(data) {
@@ -33,5 +38,11 @@ var AmarokPageEvents = (function () {
 			$.mobile.hidePageLoadingMsg();
 		});
 	});
+
+	$( "#playlist a.delete" ).on( "click", function(event) {
+		listitem = $( this ).parent( "li.ui-li" );
+		removePlaylistTrack(listitem , ( $.support.cssTransform3d ? "left" : false ) );
+	});
 });
+
 </script>

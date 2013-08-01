@@ -14,38 +14,6 @@ AmarokI18N = function() {
 	});
 }
 
-togglePlayPauseIcon = function(button, data) {
-	if ( typeof data == 'undefined' ) return;
-	
-	if ( data['status'] == 'OK' ) {
-		newIcon = 'amarok-pause';
-		oldIcon = 'amarok-play';
-		if ( data['engineState'] == 1 ) {
-			newIcon = 'amarok-play';
-			oldIcon = 'amarok-pause';
-		}
-		button.attr('data-icon', newIcon).find('.ui-icon').addClass('ui-icon-' + newIcon).removeClass('ui-icon-' + oldIcon);
-	}
-}
-
-setEmptyPlaylist = function(data) {
-	if ( typeof data == 'undefined' ) return;
-	
-	if ( data['status'] == 'OK') {
-		$('#playlist ul').html('<li class="empty">'+lang['error_playlist_empty']+'</li>').listview('refresh');
-		$('#clear-playlist').toggleClass('ui-disabled' , true);
-	}
-}
-
-toggleCurrentTrack = function(button, data) {
-	if ( typeof data == 'undefined' ) return;
-	
-	if ( data['status'] == 'OK') {
-		$('#playlist li.ui-btn-active').removeClass('ui-btn-active');
-		button.addClass('ui-btn-active');
-	}
-}
-
 var AmarokFooterEvents = (function () {
 	$('#control-buttons a').click(function() {
 		var button = $(this);
@@ -92,3 +60,94 @@ var AmarokFooterEvents = (function () {
 		});
 	});
 });
+
+togglePlayPauseIcon = function(button, data) {
+	if ( typeof data == 'undefined' ) return;
+	
+	if ( data['status'] == 'OK' ) {
+		newIcon = 'amarok-pause';
+		oldIcon = 'amarok-play';
+		if ( data['engineState'] == 1 ) {
+			newIcon = 'amarok-play';
+			oldIcon = 'amarok-pause';
+		}
+		button.attr('data-icon', newIcon).find('.ui-icon').addClass('ui-icon-' + newIcon).removeClass('ui-icon-' + oldIcon);
+	}
+}
+
+setEmptyPlaylist = function(data) {
+	if ( typeof data == 'undefined' ) return;
+	
+	if ( data['status'] == 'OK') {
+		$('#playlist ul').html('<li class="empty">'+lang['error_playlist_empty']+'</li>').listview('refresh');
+		$('#clear-playlist').toggleClass('ui-disabled' , true);
+	}
+}
+
+toggleCurrentTrack = function(button, data) {
+	if ( typeof data == 'undefined' ) return;
+	
+	if ( data['status'] == 'OK') {
+		$('#playlist li.ui-btn-active').removeClass('ui-btn-active');
+		button.addClass('ui-btn-active');
+	}
+}
+
+toggleCollectionTabs = function(tabOn, tabOff) {
+	tabOff.removeClass("ui-btn-active");
+	tabOn.addClass("ui-btn-active");
+	$( "." + tabOff.attr("data-tab-class") ).removeClass("ui-screen-visible").addClass("ui-screen-hidden");
+	$( "." + tabOn.attr("data-tab-class") ).removeClass("ui-screen-hidden").addClass("ui-screen-visible");
+}
+
+changeCurrentTrack = function(cmd) {
+	$.getJSON( '/api/cmd/'+ cmd , function(data) {
+		setTimeout(function() { 
+			$.mobile.changePage('/current-track',{reloadPage:true});
+			$.mobile.hidePageLoadingMsg();
+		},500);
+	});
+}
+
+removePlaylistTrack = function(listitem, transition) {
+	var index = listitem.find("a.ui-link-inherit").attr("data-amarok-track-id");
+
+	// Highlight the list item that will be removed
+	listitem.addClass( "ui-btn-down-d" );
+
+	// Proceed to remove track
+	$.mobile.showPageLoadingMsg();
+	$.getJSON( '/api/cmd/removeByIndex/'+ index, function(data) {
+		if ( data['status'] == 'OK' ) {
+			// Update playlist index of following tracks
+			$("#playlist .track a.ui-link-inherit").each(function(){
+				currentIndex = parseInt($(this).attr("data-amarok-track-id"));
+				if ( currentIndex > index ) {
+					$(this).attr("data-amarok-track-id", currentIndex - 1);
+				}
+			});
+
+			if ( transition ) {
+				// Remove track with a transition
+				listitem.addClass( transition )
+					.on( "webkitTransitionEnd transitionend otransitionend", function() {
+						listitem.remove();
+						$( "#playlist ul" ).listview( "refresh" ).find( ".ui-li.border" ).removeClass( "border" );
+					}).prev( "li.ui-li" ).addClass( "border" );
+			}
+			else {
+				// If CSS transition isn't supported just remove track and refresh the list
+				listitem.remove();
+				$( "#playlist ul" ).listview( "refresh" );
+			}
+
+			if ( data['results']['totalTrackCount'] == 0 ) {
+				// Playlist is now empty
+				setEmptyPlaylist(data);
+				$('#clear-playlist').toggleClass('ui-btn-active');
+				$('#clear-playlist').blur();
+			}
+		}
+		$.mobile.hidePageLoadingMsg();
+	});
+}

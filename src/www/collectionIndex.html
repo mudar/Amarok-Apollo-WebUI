@@ -55,16 +55,23 @@
 	</div>
 </div>
 
-
 <script>
 var AmarokPageEvents = (function () {
 	$( '#' + $('.tab-content .ui-screen-visible').attr('data-navbar-id') ).addClass('ui-btn-active');
 
-	var prevSelection = "tab-alphabetical";
 	$("#navbar ul li").click(function(){
-		var newSelection = $(this).children("a").attr("data-tab-class");
-		$('.tab-content > div').toggleClass("ui-screen-hidden ui-screen-visible");
-		prevSelection = newSelection;
+		tabOn = $(this).children("a");
+		tabOff = $(this).siblings().children("a");
+		toggleCollectionTabs( tabOn, tabOff );
+	});
+	$(".tab-content").on("swipeleft swiperight" , function( event ) {
+		event.stopImmediatePropagation();
+		if ( event.type == "swipeleft" ) {
+			toggleCollectionTabs( $("#navbar-genre"), $("#navbar-alphabetical") );
+		}
+		else {
+			toggleCollectionTabs( $("#navbar-alphabetical"), $("#navbar-genre") );
+		}
 	});
 });
 </script>

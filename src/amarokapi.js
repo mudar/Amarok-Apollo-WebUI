@@ -81,6 +81,16 @@ getPlaylistJSON = function(path){
 	return response;
 }
 
+cmdRemoveByIndex = function(path){
+    var index = parseInt(path.substring(path.lastIndexOf("/")+1));
+	if ( isNaN(index) ) { index = 0; }
+	
+	response = removeByIndex(index);
+	response = new HandlerResponse(true);
+	response.append('{"status":"OK","cmd":"playlist/removeByIndex","args":{"index":'+index+'},"results":{"totalTrackCount":'+Amarok.Playlist.totalTrackCount()+'}}');
+	return response;
+}
+
 cmdPlaylistClear = function(path){
 	response = clearPlaylist();
 	response = new HandlerResponse(true);

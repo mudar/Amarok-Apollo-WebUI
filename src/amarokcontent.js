@@ -221,7 +221,13 @@ playlistDiv = function(path){
 		prevArtist = '';
 		for(trackidx=0; trackidx<nbTracks; trackidx=trackidx+1){
 			t = Amarok.Playlist.trackAt(trackidx);
-			tracks += '<li class="track'+(current == trackidx ? ' ui-btn-active' : '' )+'"><a href="#" data-amarok-track-id="'+trackidx+'"><img ';
+			if (current == trackidx) {
+				tracks += '<li id="playing" class="track ui-btn-active">'
+			}
+			else {
+				tracks += '<li class="track">'
+			}
+			tracks += '<a href="#" data-amarok-track-id="'+trackidx+'"><img ';
 			if ( t.imageUrl != '' ) {
 				tracks += 'src="/img/cover/playlist/thumb/'+trackidx+'.jpg?t='+(new Date()).getTime() +'"'
 			}
@@ -233,7 +239,10 @@ playlistDiv = function(path){
 				}
 				tracks += 'src="/img/no-cover.png" class="color' + randColor +'"';
 			}
-			tracks += ' alt="" /><p>'+t.artist+'</p>'+t.title+'</a></li>' + LINE_BREAK;
+			tracks += ' alt="" /><p>'+t.artist+'</p>'+t.title+'</a>';
+			
+			tracks += '<a href="#" class="delete">Delete</a>';
+			tracks += '</li>' + LINE_BREAK;
 			if ( randColor > 8 ) randColor = 0;
 		}
 		div = div.replace('###tracks###', tracks);

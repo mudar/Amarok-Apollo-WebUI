@@ -66,6 +66,7 @@ a {text-decoration: none;}
 #track-rating header .ui-btn-inner {
 	top: 1px;
 }
+#playlist .ui-btn-inner,
 #all-artist-tracks .ui-btn-inner,
 #album-tracks .ui-btn-inner {
     left: -1px;
@@ -128,4 +129,35 @@ a {text-decoration: none;}
 		background-image: url(/img/hover_info_collections-290.png);
 		background-size: 290px 220px;
 	}
+}
+
+/* Left transition */
+li.ui-li.left {
+	-webkit-transition: -webkit-transform 500ms ease;
+	-webkit-transform: translateX(-100%);
+	-moz-transition: -moz-transform 500ms ease;
+	-moz-transform: translateX(-100%);
+	-o-transition: -o-transform 500ms ease;
+	-o-transform: translateX(-100%);
+	transition: transform 500ms ease;
+	transform: translateX(-100%);
+	border-top-width: 0; /* We switch to border bottom on previous list item */
+	border-right-width: 1px;
+}
+/* Right transition */
+li.ui-li.right {
+	-webkit-transition: -webkit-transform 500ms ease;
+	-webkit-transform: translateX(100%);
+	-moz-transition: -moz-transform 500ms ease;
+	-moz-transform: translateX(100%);
+	-o-transition: -o-transform 500ms ease;
+	-o-transform: translateX(100%);
+	transition: transform 500ms ease;
+	transform: translateX(100%);
+	border-top-width: 0; /* We switch to border bottom on previous list item */
+	border-left-width: 1px;
+}
+/* Border bottom for the previous list item during the transition*/
+li.ui-li.border {
+	border-bottom-width: 1px;
 }

@@ -3,8 +3,8 @@
 	<h1 data-amarok-lang="title_current">&nbsp;</h1>
 </header>
 
-<div data-role="content" >
-	<ul data-role="listview" id="current-track">
+<div data-role="content">
+	<ul data-role="listview" id="current-track" class="swipe-wrapper">
 		<li>
 			<label class="track-label" data-amarok-lang="label_artist">&nbsp;</label>
 			<span class="track-info">###artist###</span>
@@ -33,4 +33,18 @@
 	</div>
 
 	<div class="track-lyrics"><!--###lyrics###--></div>
+
+	<script>
+	var AmarokPageEvents = (function () {
+		$(".swipe-wrapper").on("swipeleft swiperight" , function( event ) {
+			event.stopImmediatePropagation();
+			if ( event.type == "swipeleft" ) {
+				changeCurrentTrack("next");
+			}
+			else {
+				changeCurrentTrack("prev");
+			}
+		} );
+	});
+	</script>
 </div>
