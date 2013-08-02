@@ -387,7 +387,6 @@ collectionArtistAlbumsDiv = function(path){
     div = loadFile('/www/collectionArtistAlbums.html');
 
 	artistQuery = Amarok.Collection.query('SELECT a.name, COUNT(t.id) AS total, g.name AS genre FROM artists AS a JOIN tracks AS t ON t.artist = a.id JOIN genres AS g ON t.genre = g.id WHERE a.id = ' + Amarok.Collection.escape(artistId) + (genreId > 0 ? ' AND g.id = ' + Amarok.Collection.escape(genreId): '' ) + ' GROUP BY a.id');
-	Amarok.debug('SELECT a.name, COUNT(t.id) AS total, g.name AS genre FROM artists AS a JOIN tracks AS t ON t.artist = a.id JOIN genres AS g ON t.genre = g.id WHERE a.id = ' + Amarok.Collection.escape(artistId) + (genreId > 0 ? ' AND g.id = ' + Amarok.Collection.escape(genreId): '' ) + ' GROUP BY a.id');
 	if ( artistQuery.length > 0 ) {
 		artist = artistQuery[0];
 		tracksCount = artistQuery[1];
