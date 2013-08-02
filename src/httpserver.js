@@ -177,6 +177,9 @@ HTTPServer.prototype.checkAuth = function(socket, header){
 			}
 		}
 	}
+	else {
+		USER_MODE = USER_MODE_DJ;
+	}
 	return true;
 }
 
