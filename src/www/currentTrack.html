@@ -21,10 +21,13 @@
 			<label class="track-label" data-amarok-lang="label_length">&nbsp;</label>
 			<span class="track-info">###minutes###:###seconds###</span>
 		</li>
-
-		<li><a href="/rate-me" data-rel="dialog">
+		<li class="role_guest">
 			<label class="track-label" data-amarok-lang="label_rating">&nbsp;</label>
-			<span class="track-info" id="current-rating">###rating###</span></a>
+			<span class="track-info" id="current-rating">###rating-guest###</span>
+		</li>
+		<li class="role_dj"><a href="/rate-me" data-rel="dialog">
+			<label class="track-label" data-amarok-lang="label_rating">&nbsp;</label>
+			<span class="track-info" id="current-rating">###rating-dj###</span></a>
 		</li>
 	</ul>
 
@@ -36,15 +39,17 @@
 
 	<script>
 	var AmarokPageEvents = (function () {
-		$(".swipe-wrapper").on("swipeleft swiperight" , function( event ) {
-			event.stopImmediatePropagation();
-			if ( event.type == "swipeleft" ) {
-				changeCurrentTrack("next");
-			}
-			else {
-				changeCurrentTrack("prev");
-			}
-		} );
+		if ( $("body").hasClass("role_dj") ) {
+			$(".swipe-wrapper").on("swipeleft swiperight" , function( event ) {
+				event.stopImmediatePropagation();
+				if ( event.type == "swipeleft" ) {
+					changeCurrentTrack("next");
+				}
+				else {
+					changeCurrentTrack("prev");
+				}
+			} );
+		}
 	});
 	</script>
 </div>

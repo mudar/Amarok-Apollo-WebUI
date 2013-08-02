@@ -67,6 +67,9 @@ AmarokWebUI.prototype.startService = function() {
   this.http.registerHandler("/collection", collectionIndex);
   this.http.registerHandler("/index.html", homepageDiv);
 
+  this.http.registerHandler("/api/auth/loginGuest", authAsGuest);
+  this.http.registerHandler("/api/auth/loginDj", authAsDj);
+  
   this.http.registerHandler("/api/getServerVersion", getServerVersionJSON);
   this.http.registerHandler("/api/getState", getStateJSON);
   this.http.registerHandler("/api/getCurrentTrack", getCurrentTrackJSON);

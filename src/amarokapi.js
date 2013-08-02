@@ -464,3 +464,19 @@ getCollectionSearchAllJSON = function(path){
     return response
 }
 
+authAsGuest = function(path) {
+	response = new HandlerResponse(true);
+	USER_MODE = USER_MODE_GUEST;
+	response.append('{"status":"OK","auth":"guest"}');
+	return response;
+}
+
+/**
+  * Placeholder for now!
+  */
+authAsDj = function(path) {
+	response = new HandlerResponse(true);
+	USER_MODE = USER_MODE_DJ;
+	response.append('{"status":"OK","auth":"dj"}');
+	return response;
+}

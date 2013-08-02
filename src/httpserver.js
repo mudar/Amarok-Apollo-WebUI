@@ -121,6 +121,9 @@ HTTPServer.prototype.registerHandler = function(path, func){
 HTTPServer.prototype.getRequestHandler = function(path){
     for(var registeredPath in this.requestHandlerRegistry){
         if(path.indexOf(registeredPath)==0){
+			if ( !hasAccess(registeredPath) ) {
+				return this.defaultHandler;
+			}
             return this.requestHandlerRegistry[registeredPath];
         }
     }

@@ -161,3 +161,12 @@ li.ui-li.right {
 li.ui-li.border {
 	border-bottom-width: 1px;
 }
+
+.role_guest .role_dj,
+.role_dj .role_guest,
+.role_guest #append-tracks,
+.role_guest #append-album,
+.role_guest #clear-playlist,
+.role_guest footer {
+	display: none !important;
+}

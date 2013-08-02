@@ -507,3 +507,34 @@ GetID3 = new function() {
 		return parseInt($intvalue);
 	}
 }
+
+hasAccess = function(handler) {
+	switch(handler) {
+		case "/img/cover/current":
+		case "/img/cover/playlist":
+		case "/img/cover/collection":
+		case "/current-track":
+		case "/playlist":
+		case "/collection/artists":
+		case "/collection/genres":
+		case "/collection/artist/album":
+		case "/collection/artist/tracks":
+		case "/collection/artist":
+		case "/collection":
+		case "/index.html":
+		case "/api/auth/loginGuest":
+		case "/api/auth/loginDj":
+		case "/api/getState":
+		case "/api/getCurrentTrack":
+		case "/api/getPlaylistTrackCover":
+		case "/api/getPlaylist":
+		case "/api/cmd/addMedia":
+		case "/api/getCollectionAllArtists":
+		case "/api/getCollectionTracksByArtistId":
+		case "/api/getCollectionAlbumsByArtistId":
+		case "/api/getCollectionSearchAll":
+			return true;
+			break;
+	}
+	return (USER_MODE == USER_MODE_DJ);
+}

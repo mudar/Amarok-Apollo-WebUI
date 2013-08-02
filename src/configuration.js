@@ -26,7 +26,7 @@ DEFAULT_CONFIG_BASIC_AUTH = true;
 DEFAULT_CONFIG_USER = "foo";
 DEFAULT_CONFIG_PASSWD = "bar67#";
 
-/*
+/**
  * Constants
  */
 SERVERVERSION = 7;
@@ -35,6 +35,12 @@ ENGINE_STATE_PAUSE = 1;
 THUMB_SIZE = 80;
 LINE_BREAK = '\r\n';
 
+/**
+ * Authentication
+ */
+USER_MODE_DJ = 10;
+USER_MODE_GUEST = 5;
+USER_MODE = USER_MODE_GUEST;	// 10=dj, 5=guest
 
 /*
  * Creates a new Configuration object

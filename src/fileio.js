@@ -85,3 +85,15 @@ loadFile = function(path,isText){
 		return r;
 	}
 }
+
+loadHeaderFile = function() {
+	r = loadFile('/www/header.html',true);
+	role = ( USER_MODE == USER_MODE_DJ ? "role_dj" : "role_guest" );
+	return r.replace("###role###",role);
+}
+
+loadFooterFile = function() {
+	r = loadFile('/www/footer.html',true);
+	r = r.replace('###language###',readConfigV('lang',DEFAULT_CONFIG_LANG));
+	return r;
+}
