@@ -469,7 +469,8 @@ collectionAlbumDiv = function(path){
 	for(trackidx = 0; trackidx < nbTracks; trackidx++){
 		trackId = trackQuery[trackidx++];
 		trackName = trackQuery[trackidx];
-		tracksDiv += '<li class="track"><a class="track-add-play" href="#" data-amarok-track-id="'+trackId+'">';
+		tracksDiv += '<li class="track"'+(hasAccess("/api/cmd/addPlayMedia")? '' : ' data-icon="plus"' )+'>';
+		tracksDiv += '<a class="'+(hasAccess("/api/cmd/addPlayMedia") ? 'track-add-play' : 'track-add' )+'" href="#" data-amarok-track-id="'+trackId+'">';
 		if ( genreId > 0 ) {
 			trackidx++;
 			currentGenreId = trackQuery[trackidx++];
@@ -486,7 +487,12 @@ collectionAlbumDiv = function(path){
 		else {
 			tracksDiv += '<h3>' + trackName + '</h3>';
 		}
-		tracksDiv += '</a><a class="track-add" href="#" data-amarok-track-id="'+trackId+'" data-amarok-lang="btn_add">&nbsp;</a></li>'+ LINE_BREAK;
+		tracksDiv += '</a>';
+		if ( hasAccess("/api/cmd/addPlayMedia") ) {
+			// No need for the Add button since that's what the main link does for Guest mode
+			tracksDiv += '<a class="track-add" href="#" data-amarok-track-id="'+trackId+'" data-amarok-lang="btn_add">&nbsp;</a>';
+		}
+		tracksDiv += '</li>'+ LINE_BREAK;
 	}
 	
 	response = new HandlerResponse();
@@ -540,7 +546,13 @@ collectionAllArtistTracksDiv = function(path){
 			prevAlbum = albumName ;
 		}
 		
-		tracksDiv += '<li class="track" data-filtertext="'+jsonEscape(albumName+ ' ' + trackName)+'"><a class="track-add-play" href="#" data-amarok-track-id="'+trackId+'"><h3>'+trackName+'</h3></a><a class="track-add" href="#" data-amarok-track-id="'+trackId+'" data-amarok-lang="btn_add">&nbsp;</a></li>'+ LINE_BREAK;
+		tracksDiv += '<li class="track" data-filtertext="'+jsonEscape(albumName+ ' ' + trackName)+'"'+(hasAccess("/api/cmd/addPlayMedia")? '' : ' data-icon="plus"' )+'>';
+		tracksDiv += '<a class="'+(hasAccess("/api/cmd/addPlayMedia") ? 'track-add-play' : 'track-add' )+'" href="#" data-amarok-track-id="'+trackId+'"><h3>'+trackName+'</h3></a>';
+		if ( hasAccess("/api/cmd/addPlayMedia") ) {
+			// No need for the Add button since that's what the main link does for Guest mode
+			tracksDiv += '<a class="track-add" href="#" data-amarok-track-id="'+trackId+'" data-amarok-lang="btn_add">&nbsp;</a>';
+		}
+		tracksDiv += '</li>'+ LINE_BREAK;
 	}
 
 	response = new HandlerResponse();

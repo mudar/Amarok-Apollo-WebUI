@@ -159,14 +159,21 @@ HTTPServer.prototype.checkAuth = function(socket, header){
 		if (header.value("Authorization").match("^Basic") != "Basic") {
 			this.sendErrorMsg(socket, 401, "Authorization Required", "<h3>401 Error</h3>Authorization Required!", [["WWW-Authenticate", 'Basic realm="Amarok Apollo WebUI"']]);
 			return false;
-			
 		}
 		else {
-			authStr = new QByteArray(this.webui.configuration.user + ":" + this.webui.configuration.passwd).toBase64();
+			authStrDj = new QByteArray(this.webui.configuration.user + ":" + this.webui.configuration.passwd).toBase64();
+			authStrGuest = new QByteArray(this.webui.configuration.user + ":" + this.webui.configuration.passwdGuest).toBase64();
 			authResponse = header.value("Authorization").substring(6);
-			if (authResponse != authStr) {
-				this.sendErrorMsg(socket, 401, "Authorization Required", "<h3>401 Error</h3>Authorization Required!", [["WWW-Authenticate", 'Basic realm="Amarok Apollo WebUI"']]);
-				return false;
+
+			if (authResponse == authStrDj) {
+				USER_MODE = USER_MODE_DJ;
+			}
+			else {
+				USER_MODE = USER_MODE_GUEST;
+				if (authResponse != authStrGuest) {
+					this.sendErrorMsg(socket, 401, "Authorization Required", "<h3>401 Error</h3>Authorization Required!", [["WWW-Authenticate", 'Basic realm="Amarok Apollo WebUI"']]);
+					return false;
+				}
 			}
 		}
 	}
