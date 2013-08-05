@@ -13,7 +13,7 @@
 <script>
 var AmarokPageEvents = (function () {
 
-	if ( $('#playing').length != 0 ) {
+	if ( ( $('#playing').length != 0 ) && ( $('#playing').prev().length != 0 ) ) {
 		$('html, body').animate({scrollTop: $('#playing').prev().offset().top},"fast");
 	}
 
