@@ -34,9 +34,10 @@ lang['btn_play'] = 'Играть/Пауза';
 lang['btn_next'] = 'Следующая дорожка';
 lang['btn_volume_down'] = 'Уменьшить громкость';
 lang['btn_volume_up'] = 'Увеличить громкость';
+lang['error_network'] = 'Ошибка сети';
 
 /**
- * Homep
+ * Homepage
  */
 lang['btn_home_current'] = 'Текущую дорожку';
 lang['btn_home_playlist'] = 'Список воспроизведения';
@@ -88,3 +89,8 @@ lang['title_artist'] = 'Исполнитель';
 lang['artist_all_tracks'] = 'Дорожки';
 lang['artist_album_unknown'] = 'Неизвестный альбом';
 lang['error_artist_not_found'] = 'Сведений не найдено&hellip;';
+
+/**
+ * Guest Error Dialog 
+ */
+lang['error_guest_countdown'] = 'Попробуйте позже.';

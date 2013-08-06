@@ -34,9 +34,10 @@ lang['btn_play'] = 'Play/Pause';
 lang['btn_next'] = 'Next';
 lang['btn_volume_down'] = 'Volume Down';
 lang['btn_volume_up'] = 'Volume Up';
+lang['error_network'] = 'Network error';
 
 /**
- * Homep
+ * Homepage
  */
 lang['btn_home_current'] = 'Current Track';
 lang['btn_home_playlist'] = 'Playlist';
@@ -88,3 +89,8 @@ lang['title_artist'] = 'Artist';
 lang['artist_all_tracks'] = 'All Tracks';
 lang['artist_album_unknown'] = 'Unknown Album';
 lang['error_artist_not_found'] = 'Artist not found!';
+
+/**
+ * Guest Error Dialog 
+ */
+lang['error_guest_countdown'] = 'Please try again later.';

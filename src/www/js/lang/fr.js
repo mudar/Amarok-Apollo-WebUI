@@ -34,6 +34,7 @@ lang['btn_play'] = 'Lecture / pause';
 lang['btn_next'] = 'Piste suivante';
 lang['btn_volume_down'] = 'Diminuer le volume';
 lang['btn_volume_up'] = 'Augmenter le volume';
+lang['error_network'] = 'Erreur réseau';
 
 /**
  * Homepage
@@ -88,3 +89,8 @@ lang['title_artist'] = 'Artiste';
 lang['artist_all_tracks'] = 'Toutes les pistes';
 lang['artist_album_unknown'] = 'Album inconnu';
 lang['error_artist_not_found'] = 'Aucun artist n’a été trouvé&nbsp;!';
+
+/**
+ * Guest Error Dialog 
+ */
+lang['error_guest_countdown'] = 'Veuillez réessayer plus tard.';
