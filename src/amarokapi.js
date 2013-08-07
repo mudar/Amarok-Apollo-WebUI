@@ -36,9 +36,11 @@ getStateJSON = function(path){
 }
 
 getGuestCountdown = function(path){
+	interval = readConfigV( 'guestInterval', DEFAULT_GUEST_INTERVAL );
+	
 	response = new HandlerResponse(true);
-	nextSubmitTime = ( GUEST_INTERVAL == 0 ? 0 : getNextSubmitTime() );
-	response.append('{"status":"OK","results":{"interval":'+GUEST_INTERVAL+',"nextSubmitTime":'+nextSubmitTime+'}}');
+	nextSubmitTime = ( interval == 0 ? 0 : getNextSubmitTime() );
+	response.append('{"status":"OK","results":{"interval":'+interval+',"nextSubmitTime":'+nextSubmitTime+'}}');
 	return response;
 }
 

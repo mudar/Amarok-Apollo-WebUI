@@ -547,6 +547,7 @@ updateLastSubmitTime = function() {
 }
 
 getNextSubmitTime = function() {
-	date = new Date( GUEST_LAST_SUBMIT + ( GUEST_INTERVAL * 1000 ) );
+	interval = readConfigV( 'guestInterval', DEFAULT_GUEST_INTERVAL );
+	date = new Date( GUEST_LAST_SUBMIT + ( interval * 1000 ) );
 	return date.getTime();
 }

@@ -32,8 +32,8 @@ DEFAULT_CONFIG_BASIC_AUTH = true;
 DEFAULT_CONFIG_USER = "foo";
 DEFAULT_CONFIG_PASSWD = "bar67#";
 DEFAULT_CONFIG_PASSWD_GUEST = "guest";
+DEFAULT_GUEST_INTERVAL = 30; // seconds 
 USER_MODE = USER_MODE_GUEST;
-GUEST_INTERVAL = 30; // seconds between each Track sumbitted by guests
 GUEST_LAST_SUBMIT = (new Date()).getTime();
 GUEST_RESET_AFTER_DJ = false;
 
@@ -83,6 +83,7 @@ Configuration.prototype.saveSettings = function() {
   writeConfigV( "user", this.user );
   writeConfigV( "passwd", this.passwd );
   writeConfigV( "passwdGuest", this.passwdGuest );
+  writeConfigV( "guestInterval", this.guestInterval );
   writeConfigV( "externalCollection", this.externalCollection );
 }
 
@@ -101,6 +102,7 @@ Configuration.prototype.restoreSettings = function() {
   this.user = readConfigV( "user", this.user );
   this.passwd = readConfigV( "passwd", this.passwd );
   this.passwdGuest = readConfigV( "passwdGuest", this.passwdGuest );
+  this.guestInterval = readConfigV( "guestInterval", this.guestInterval );
   this.externalCollection = readConfigV( "externalCollection", this.externalCollection );
 }
 
@@ -117,6 +119,7 @@ Configuration.prototype.restoreDefaultSettings = function() {
   this.user = DEFAULT_CONFIG_USER;
   this.passwd = DEFAULT_CONFIG_PASSWD;
   this.passwdGuest = DEFAULT_CONFIG_PASSWD_GUEST;
+  this.guestInterval = DEFAULT_GUEST_INTERVAL;
   this.externalCollection = "/media/";
 }
 
@@ -182,6 +185,10 @@ Configuration.prototype.setupGui = function() {
 		this.passwordLineEdit = new QLineEdit( this.dialog );
 		this.passwordLineEdit.echoMode = QLineEdit.Password;
 		this.passwordGuestLineEdit = new QLineEdit( this.dialog );
+		this.guestIntervalSpinBox = new QSpinBox( this.dialog );
+		this.guestIntervalSpinBox.minimum = 0;
+		this.guestIntervalSpinBox.maximum = 6000;
+		this.guestIntervalSpinBox.singleStep = 10;
 		this.toggleAuthentication();
 
 		this.componentsLayout.addRow( "Language", this.langComboBox );
@@ -191,6 +198,7 @@ Configuration.prototype.setupGui = function() {
 		this.componentsLayout.addRow( "Username", this.userLineEdit );
 		this.componentsLayout.addRow( "DJ Password", this.passwordLineEdit );
 		this.componentsLayout.addRow( "Guest Password", this.passwordGuestLineEdit );
+		this.componentsLayout.addRow( "Guests Countdown (Seconds)", this.guestIntervalSpinBox );
 		
 		this.dialogButtons = new QDialogButtonBox( this.dialog );
 		this.dialog.layout.addWidget( this.dialogButtons, 0, 0 );
@@ -221,6 +229,7 @@ Configuration.prototype.setValues = function( config ) {
   this.userLineEdit.text = config.user;
   this.passwordLineEdit.text = config.passwd;
   this.passwordGuestLineEdit.text = config.passwdGuest;
+  this.guestIntervalSpinBox.value = config.guestInterval;
   
   ipAddress = getIpAddress();
   if ( ipAddress == false ) {
@@ -269,6 +278,7 @@ Configuration.prototype.acceptAndClose = function() {
   this.user = this.userLineEdit.text;
   this.passwd = this.passwordLineEdit.text;
   this.passwdGuest = this.passwordGuestLineEdit.text;
+  this.guestInterval = this.guestIntervalSpinBox.value;
   this.saveSettings();
   this.dialog.accept();
 }
