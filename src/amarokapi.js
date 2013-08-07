@@ -35,6 +35,13 @@ getStateJSON = function(path){
 	return response;
 }
 
+getGuestCountdown = function(path){
+	response = new HandlerResponse(true);
+	nextSubmitTime = ( GUEST_INTERVAL == 0 ? 0 : getNextSubmitTime() );
+	response.append('{"status":"OK","results":{"interval":'+GUEST_INTERVAL+',"nextSubmitTime":'+nextSubmitTime+'}}');
+	return response;
+}
+
 getCurrentTrackJSON = function(path){
 	response = new HandlerResponse(true);
 	
@@ -219,6 +226,14 @@ cmdCollectionPlayByTrackId = function(path){
 }
 
 cmdCollectionEnqueue = function(path) {
+	// Check if Guest Countdown has expired
+	if ( USER_MODE == USER_MODE_GUEST ) {
+		tryLaterResponse = checkGuestCountdown();
+		if ( tryLaterResponse != null ) {
+			return tryLaterResponse;
+		}
+	}
+	
     req_splitted = path.split("/");
 	req_len = req_splitted.length;
 
@@ -245,10 +260,24 @@ cmdCollectionEnqueue = function(path) {
 			tracksId += ',';
 		}
     }
+    
+    // Reset Guest Countdown
+	if ( ( USER_MODE == USER_MODE_GUEST ) || GUEST_RESET_AFTER_DJ ) {
+		updateLastSubmitTime();
+	}
 
 	response = new HandlerResponse(true);
 	response.append('{"status":"OK","cmd":"playlist/addMedia","args":{"tracksId":['+tracksId+']},"results":{"medias":['+medias+']}}');
 	return response;
+}
+
+checkGuestCountdown = function() {
+	if ( getNextSubmitTime() > (new Date()).getTime() ) {
+		response = new HandlerResponse(true);
+		response.append('{"status":"fail","cmd":"playlist/addMedia","error":{"code":'+ERROR_CODE_GUEST_COUNTDOWN+', "description":"error_guest_countdown"}}');
+		return response;
+	}
+	return null;
 }
 
 cmdSetRating = function(path){

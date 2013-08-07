@@ -93,7 +93,8 @@ loadHeaderFile = function() {
 }
 
 loadFooterFile = function() {
-	r = loadFile('/www/footer.html',true);
+	filename = ( USER_MODE == USER_MODE_GUEST ? "footer-guest.html" : "footer.html" );
+	r = loadFile('/www/'+filename ,true);
 	r = r.replace('###language###',readConfigV('lang',DEFAULT_CONFIG_LANG));
 	return r;
 }

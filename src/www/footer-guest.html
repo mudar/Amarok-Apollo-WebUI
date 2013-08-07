@@ -1,0 +1,20 @@
+
+		<footer data-role="footer" data-position="fixed"> 
+			<h3 class="playlist-countdown role_guest"></h3>
+		</footer>
+	</div>
+
+	<div id="countdown-error" data-transition="fade" data-role="popup" data-overlay-theme="a" class="ui-content role_guest">
+		<p data-amarok-lang="error_guest_countdown">&nbsp;</p>
+		<a href="#" data-rel="back"><img src="/img/clock.png" alt="" /></a>
+	</div>
+
+<script src="/js/lang/###language###.js"></script>
+<script src="/js/jquery-jqm-amarok-min-14.js"></script>
+<script src="/js/jquery-countdown-min.js"></script>
+<script>
+$(document).off('pageshow', '#wrapper-page').on('pageshow', '#wrapper-page', function() {AmarokI18N();AmarokFooterEvents();AmarokPageEvents();} );
+</script>
+
+</body>
+</html>

@@ -33,6 +33,9 @@ DEFAULT_CONFIG_USER = "foo";
 DEFAULT_CONFIG_PASSWD = "bar67#";
 DEFAULT_CONFIG_PASSWD_GUEST = "guest";
 USER_MODE = USER_MODE_GUEST;
+GUEST_INTERVAL = 30; // seconds between each Track sumbitted by guests
+GUEST_LAST_SUBMIT = (new Date()).getTime();
+GUEST_RESET_AFTER_DJ = false;
 
 /**
  * Constants
@@ -42,6 +45,7 @@ ENGINE_STATE_PLAY = 0;
 ENGINE_STATE_PAUSE = 1;
 THUMB_SIZE = 80;
 LINE_BREAK = '\r\n';
+ERROR_CODE_GUEST_COUNTDOWN = 10;
 
 /*
  * Creates a new Configuration object

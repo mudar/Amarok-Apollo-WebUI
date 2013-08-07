@@ -32,25 +32,8 @@ var AmarokPageEvents = (function () {
 		});
 	});
 
-	$('#all-artist-tracks .track a').click(function() {
-		$.mobile.showPageLoadingMsg();
-		var parent = $(this).parent();
-		parent.toggleClass('ui-btn-active');
-
-		var apiUrl = '/api/cmd/addPlayMedia/';
-		var btn = null;
-		if ( $(this).hasClass('track-add') ) {
-			apiUrl = '/api/cmd/addMedia/';
-			btn = $(this);
-		}
-
-		$.getJSON( apiUrl + $(this).attr("data-amarok-track-id") , function(data) {
-			if ( btn != null ) {
-				btn.addClass('ui-disabled');
-			}
-			parent.toggleClass('ui-btn-active');
-			$.mobile.hidePageLoadingMsg();
-		});
+	$('#all-artist-tracks .track a').click( function() { 
+		addPlaylistTrack( $(this) ); 
 	});
-} );
+});
 </script>

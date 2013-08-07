@@ -113,6 +113,23 @@ a {text-decoration: none;}
 .ui-icon-amarok-volume-up { background-position: -180px -1px; }
 .ui-icon-amarok-genre { background-position: -216px -1px; background-color: rgba(0, 0, 0, 0.4);}
 
+body.role_guest .role_dj,
+body.role_dj .role_guest,
+.role_guest #append-tracks,
+.role_guest #append-album,
+.role_guest #clear-playlist {
+	display: none !important;
+}
+
+/**
+ * jQuery Countdown 
+ */
+#countdown-error ,
+footer h3.role_guest { text-align: center; }
+
+/**
+ * Higher resolution icons for mobile devices (Rertina display)
+ */
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
 	.ui-icon-amarok-genre ,
 	.ui-icon-amarok-play ,
@@ -131,7 +148,9 @@ a {text-decoration: none;}
 	}
 }
 
-/* Left transition */
+/**
+ * Left/Right swipe transitions
+ */
 li.ui-li.left {
 	-webkit-transition: -webkit-transform 500ms ease;
 	-webkit-transform: translateX(-100%);
@@ -144,7 +163,6 @@ li.ui-li.left {
 	border-top-width: 0; /* We switch to border bottom on previous list item */
 	border-right-width: 1px;
 }
-/* Right transition */
 li.ui-li.right {
 	-webkit-transition: -webkit-transform 500ms ease;
 	-webkit-transform: translateX(100%);
@@ -157,16 +175,7 @@ li.ui-li.right {
 	border-top-width: 0; /* We switch to border bottom on previous list item */
 	border-left-width: 1px;
 }
-/* Border bottom for the previous list item during the transition*/
+/* Border bottom for the previous list item during the transition */
 li.ui-li.border {
 	border-bottom-width: 1px;
-}
-
-.role_guest .role_dj,
-.role_dj .role_guest,
-.role_guest #append-tracks,
-.role_guest #append-album,
-.role_guest #clear-playlist,
-.role_guest footer {
-	display: none !important;
 }

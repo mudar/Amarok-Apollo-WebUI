@@ -26,7 +26,9 @@ else{if(page=='/playlist'){var selected=[];if(button.attr('data-amarok-cmd')=='p
 else if(button.attr('data-amarok-cmd')=='next'){selected=$('#playlist .ui-btn-active').next();if(selected.length==0){selected=$('#playlist li:first-child');}}
 if(selected.length!=0){$('#playlist .ui-btn-active').removeClass('ui-btn-active');selected.addClass('ui-btn-active');}}
 $.mobile.hidePageLoadingMsg();}
-button.toggleClass('ui-btn-active',false).blur();});});});togglePlayPauseIcon=function(button,data){if(typeof data=='undefined')return;if(data['status']=='OK'){newIcon='amarok-pause';oldIcon='amarok-play';if(data['engineState']==1){newIcon='amarok-play';oldIcon='amarok-pause';}
+button.toggleClass('ui-btn-active',false).blur();});});if(isGuest()){nextSubmitDate=getGuestNextSubmitDate();if(nextSubmitDate==null){$(".playlist-countdown").html(lang['error_network']);}
+else{if(nextSubmitDate>new Date()){$('.track .track-add.ui-link-inherit').addClass('ui-disabled');}
+$(".playlist-countdown").countdown({until:nextSubmitDate,format:'MS',compact:true,onExpiry:hideGuestCountdown,alwaysExpire:true});}}});togglePlayPauseIcon=function(button,data){if(typeof data=='undefined')return;if(data['status']=='OK'){newIcon='amarok-pause';oldIcon='amarok-play';if(data['engineState']==1){newIcon='amarok-play';oldIcon='amarok-pause';}
 button.attr('data-icon',newIcon).find('.ui-icon').addClass('ui-icon-'+newIcon).removeClass('ui-icon-'+oldIcon);}}
 setEmptyPlaylist=function(data){if(typeof data=='undefined')return;if(data['status']=='OK'){$('#playlist ul').html('<li class="empty">'+lang['error_playlist_empty']+'</li>').listview('refresh');$('#clear-playlist').toggleClass('ui-disabled',true);}}
 toggleCurrentTrack=function(button,data){if(typeof data=='undefined')return;if(data['status']=='OK'){$('#playlist li.ui-btn-active').removeClass('ui-btn-active');button.addClass('ui-btn-active');}}
@@ -36,3 +38,11 @@ removePlaylistTrack=function(listitem,transition){var index=listitem.find("a.ui-
 else{listitem.remove();$("#playlist ul").listview("refresh");}
 if(data['results']['totalTrackCount']==0){setEmptyPlaylist(data);$('#clear-playlist').toggleClass('ui-btn-active');$('#clear-playlist').blur();}}
 $.mobile.hidePageLoadingMsg();});}
+addPlaylistTrack=function(listitem){$.mobile.showPageLoadingMsg();var parent=listitem.parent();parent.toggleClass('ui-btn-active');var apiUrl='/api/cmd/addPlayMedia/';var btn=null;if(listitem.hasClass('track-add')){apiUrl='/api/cmd/addMedia/';btn=listitem;}
+$.getJSON(apiUrl+listitem.attr("data-amarok-track-id"),function(data){if(btn!=null){btn.addClass('ui-disabled');}
+parent.toggleClass('ui-btn-active');$.mobile.hidePageLoadingMsg();if(isGuest()){untilDate=getGuestNextSubmitDate();if(untilDate>=new Date()){$('.track .track-add.ui-link-inherit').addClass('ui-disabled');$('footer').slideDown();$(".playlist-countdown").countdown({until:untilDate,format:'MS',compact:true,onExpiry:hideGuestCountdown,alwaysExpire:true});}
+if(data['status']=='fail'){$("#countdown-error").popup();$("#countdown-error").popup("open");}}});}
+isGuest=function(){return $('body').hasClass('role_guest');}
+hideGuestCountdown=function(){if(new Date()>=getGuestNextSubmitDate()){$('.track .track-add.ui-link-inherit').removeClass('ui-disabled');$(".playlist-countdown").countdown('destroy');$('footer').slideUp('fast');}
+else{$.mobile.changePage(window.location.href,{reloadPage:true});}}
+getGuestNextSubmitDate=function(){var date=null;$.ajax({url:'/api/getGuestCountdown',async:false,dataType:'json',success:function(data){date=new Date(parseInt(data['results']['nextSubmitTime']));}});return date;}

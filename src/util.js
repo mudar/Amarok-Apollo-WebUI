@@ -525,6 +525,7 @@ hasAccess = function(handler) {
 		case "/api/auth/loginGuest":
 		case "/api/auth/loginDj":
 		case "/api/getState":
+		case "/api/getGuestCountdown":
 		case "/api/getCurrentTrack":
 		case "/api/getPlaylistTrackCover":
 		case "/api/getPlaylist":
@@ -537,4 +538,15 @@ hasAccess = function(handler) {
 			break;
 	}
 	return (USER_MODE == USER_MODE_DJ);
+}
+
+updateLastSubmitTime = function() {
+	date = (new Date());
+	date.setMilliseconds(0);
+	GUEST_LAST_SUBMIT = date.getTime();
+}
+
+getNextSubmitTime = function() {
+	date = new Date( GUEST_LAST_SUBMIT + ( GUEST_INTERVAL * 1000 ) );
+	return date.getTime();
 }
