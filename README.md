@@ -34,6 +34,7 @@ This is an updated version of the popular [WebUI-for-Amarok][link_github_amarok_
 * Developed by [Mudar Noufal][link_mudar_ca]  &lt;mn@mudar.ca&gt;
 * A fork of [WebUI-for-Amarok][link_github_amarok_webui] by Johannes Wolter ([jwchile][link_github_jwchile]) &lt;jw@inutil.org&gt;
 * Initial contributors: Rodrigo Rosenfeld Rosas ([rosenfeld][link_github_rosenfeld]), Nacho Peix ([nachinius][link_github_nachinius]), Martin Höher ([mhoeher][link_github_mhoeher]) &amp; Ian Monroe &lt;ian@monroe.nu&gt;
+* JavaScript libraries: [jQuery][link_js_jquery], [jQuery Mobile][link_js_jqm], [jQuery Mobile Flat UI Theme][link_js_flat] by ququplay and [jQuery Countdown][link_js_countdown] by Keith Wood.
 * Note: for any missing credits or licence issues please contact me so I could complete the information!
 
 ##About Amarok
@@ -82,5 +83,9 @@ Wikipedia excerpt:
 [link_github_rosenfeld]: http://github.com/rosenfeld
 [link_github_nachinius]: http://github.com/nachinius
 [link_github_mhoeher]: http://github.com/mhoeher
+[link_js_jquery]: http://jquery.com/‎
+[link_js_jqm]: http://jquerymobile.com/
+[link_js_flat]: http://github.com/ququplay/jquery-mobile-flat-ui-theme
+[link_js_countdown]: http://keith-wood.name/countdown.html
 [link_amarok]: http://amarok.kde.org/
 [link_mudar_ca]: http://www.mudar.ca/
