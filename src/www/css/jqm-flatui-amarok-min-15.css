@@ -413,6 +413,6 @@ a{padding-left:20%;padding-right:20%}#track-rating header .ui-btn-inner{top:1px}
 body.role_dj .role_guest,
 .role_guest #append-tracks,
 .role_guest #append-album,
-.role_guest #clear-playlist{display:none !important}#countdown-error ,
+.role_guest #clear-playlist{display:none !important}.countdown-error ,
 footer
 h3.role_guest{text-align:center}@media only screen and (-webkit-min-device-pixel-ratio: 2){.ui-icon-amarok-genre,.ui-icon-amarok-play,.ui-icon-amarok-pause,.ui-icon-amarok-next,.ui-icon-amarok-prev,.ui-icon-amarok-volume-up,.ui-icon-amarok-volume-down{background-image:url(/img/icons-36-white-amarok.png);background-size:234px 18px}.ui-icon-amarok-collection{background-image:url(/img/hover_info_collections-290.png);background-size:290px 220px}}li.ui-li.left{-webkit-transition:-webkit-transform 500ms ease;-webkit-transform:translateX(-100%);-moz-transition:-moz-transform 500ms ease;-moz-transform:translateX(-100%);-o-transition:-o-transform 500ms ease;-o-transform:translateX(-100%);transition:transform 500ms ease;transform:translateX(-100%);border-top-width:0;border-right-width:1px}li.ui-li.right{-webkit-transition:-webkit-transform 500ms ease;-webkit-transform:translateX(100%);-moz-transition:-moz-transform 500ms ease;-moz-transform:translateX(100%);-o-transition:-o-transform 500ms ease;-o-transform:translateX(100%);transition:transform 500ms ease;transform:translateX(100%);border-top-width:0;border-left-width:1px}li.ui-li.border{border-bottom-width:1px}

@@ -23,6 +23,7 @@ This is an updated version of the popular [WebUI-for-Amarok][link_github_amarok_
 * Add Album or Tracks to Playlist, individually or by batch.
 * Elegant and modern FlatUI design!
 * **Multi-langugage** support: English, Español, Français, Deutsch, etc.
+* DJ or Guest mode.
 
 ## Wiki
 * [How to install][link_github_installation]
@@ -83,7 +84,7 @@ Wikipedia excerpt:
 [link_github_rosenfeld]: http://github.com/rosenfeld
 [link_github_nachinius]: http://github.com/nachinius
 [link_github_mhoeher]: http://github.com/mhoeher
-[link_js_jquery]: http://jquery.com/‎
+[link_js_jquery]: http://jquery.com/
 [link_js_jqm]: http://jquerymobile.com/
 [link_js_flat]: http://github.com/ququplay/jquery-mobile-flat-ui-theme
 [link_js_countdown]: http://keith-wood.name/countdown.html

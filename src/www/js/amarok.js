@@ -195,8 +195,8 @@ addPlaylistTrack = function(listitem) {
 				$(".playlist-countdown").countdown({until: untilDate,format:'MS',compact:true,onExpiry:hideGuestCountdown,alwaysExpire:true});
 			}
 			if ( data['status'] == 'fail' ) {
-				$( "#countdown-error" ).popup();
-				$( "#countdown-error" ).popup( "open" );
+				$( ".countdown-error" ).popup();
+				$( ".countdown-error" ).popup( "open" );
 			}
 		}
 	});

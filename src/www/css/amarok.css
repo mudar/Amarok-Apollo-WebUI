@@ -124,7 +124,7 @@ body.role_dj .role_guest,
 /**
  * jQuery Countdown 
  */
-#countdown-error ,
+.countdown-error ,
 footer h3.role_guest { text-align: center; }
 
 /**
