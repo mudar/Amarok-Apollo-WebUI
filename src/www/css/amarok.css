@@ -1,6 +1,7 @@
 a {text-decoration: none;}
 
 .light-weight { font-weight: normal; }
+.hidden { display: none; }
 
 #home-buttons {
 	min-width: 200px;
@@ -124,7 +125,7 @@ body.role_dj .role_guest,
 /**
  * jQuery Countdown 
  */
-.countdown-error ,
+#countdown-error ,
 footer h3.role_guest { text-align: center; }
 
 /**

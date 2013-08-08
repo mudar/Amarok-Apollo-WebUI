@@ -15,6 +15,8 @@ AmarokI18N = function() {
 }
 
 var AmarokFooterEvents = (function () {
+	$( "#countdown-error" ).popup();  // Initialize as a popup
+	
 	$('#control-buttons a').click(function() {
 		var button = $(this);
 		$.mobile.showPageLoadingMsg();
@@ -66,12 +68,18 @@ var AmarokFooterEvents = (function () {
 	if ( isGuest() ) {
 		nextSubmitDate = getGuestNextSubmitDate();
 		if ( nextSubmitDate == null ) {
+			// Network error
 			$(".playlist-countdown").html( lang['error_network'] );
+		}
+		else if ( nextSubmitDate == 0 ) {
+			// Interval equals zero
+			$('footer, .playlist-countdown').hide();
 		}
 		else {
 			if ( nextSubmitDate > new Date() ) {
 				$('.track .track-add.ui-link-inherit').addClass('ui-disabled');
 			}
+			$('footer').removeClass('hidden');
 			$(".playlist-countdown").countdown({until: nextSubmitDate,format:'MS',compact:true,onExpiry:hideGuestCountdown,alwaysExpire:true});
 		}
 	}
@@ -188,15 +196,18 @@ addPlaylistTrack = function(listitem) {
 		$.mobile.hidePageLoadingMsg();
 
 		if ( isGuest() ) {
-			untilDate = getGuestNextSubmitDate();
-			if ( untilDate >= new Date() ) {
+			nextSubmitDate = getGuestNextSubmitDate();
+			if ( nextSubmitDate == 0 ) {
+				// Interval equals zero
+				$('footer').hide();
+			} 
+			else if ( nextSubmitDate >= new Date() ) {
 				$('.track .track-add.ui-link-inherit').addClass('ui-disabled');
 				$('footer').slideDown();
-				$(".playlist-countdown").countdown({until: untilDate,format:'MS',compact:true,onExpiry:hideGuestCountdown,alwaysExpire:true});
+				$(".playlist-countdown").countdown({until: nextSubmitDate,format:'MS',compact:true,onExpiry:hideGuestCountdown,alwaysExpire:true});
 			}
 			if ( data['status'] == 'fail' ) {
-				$( ".countdown-error" ).popup();
-				$( ".countdown-error" ).popup( "open" );
+				$( "#countdown-error" ).popup( "open" );
 			}
 		}
 	});
@@ -210,9 +221,17 @@ isGuest = function() {
  * Handle Guest countdown
  */
 hideGuestCountdown = function() {
-	if ( new Date() >= getGuestNextSubmitDate() ) {
+	nextSubmitDate = getGuestNextSubmitDate();
+	
+	if ( nextSubmitDate == 0 ) {
+		// Interval equals zero
+		// Just in case: hideGuestCountdown() is never supposed to be called in this case.
+		$('footer').hide();
+	} 
+	else if ( new Date() >= nextSubmitDate ) {
 		$('.track .track-add.ui-link-inherit').removeClass('ui-disabled');
 		$(".playlist-countdown").countdown('destroy');
+
 		$('footer').slideUp('fast');
 	}
 	else {
@@ -225,7 +244,12 @@ getGuestNextSubmitDate = function() {
     $.ajax({url: '/api/getGuestCountdown', 
         async: false, dataType: 'json', 
         success: function(data) { 
-			date = new Date(parseInt(data['results']['nextSubmitTime'])); 
+			if ( data['results']['interval'] == 0 ) {
+				date = 0;
+			}
+			else {
+				date = new Date(data['results']['nextSubmitTime']); 
+			}
         }}); 
     return date;
 }
