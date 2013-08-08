@@ -197,7 +197,7 @@ Configuration.prototype.setupGui = function() {
 		this.componentsLayout.addRow( "Enable Authentication", this.basicAuthCheckBox );
 		this.componentsLayout.addRow( "Username", this.userLineEdit );
 		this.componentsLayout.addRow( "DJ Password", this.passwordLineEdit );
-		this.componentsLayout.addRow( "Guest Password", this.passwordGuestLineEdit );
+		this.componentsLayout.addRow( "Guests Password", this.passwordGuestLineEdit );
 		this.componentsLayout.addRow( "Guests Countdown (Seconds)", this.guestIntervalSpinBox );
 		
 		this.dialogButtons = new QDialogButtonBox( this.dialog );
@@ -259,6 +259,7 @@ Configuration.prototype.toggleAuthentication = function() {
 	this.userLineEdit.enabled = isEnabled ;
 	this.passwordLineEdit.enabled = isEnabled ;
 	this.passwordGuestLineEdit.enabled = isEnabled ;
+	this.guestIntervalSpinBox.enabled = isEnabled ;
 }
 
 /*
