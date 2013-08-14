@@ -153,7 +153,6 @@ cmdPlayPause = function(path){
 }
 
 cmdStop = function(path){
-	
 	response = stop();
 	response = new HandlerResponse(true);
 	response.append('{"status":"OK","cmd":"stop"}');
@@ -161,18 +160,33 @@ cmdStop = function(path){
 }
 
 cmdVolumeUp = function(path){
-	response = incVolume();
+	var step = parseInt(path.substring(path.lastIndexOf("/")+1));
+	if ( isNaN(step) ) { step = getVolumeStep(); }
+	
+	response = incVolume(step);
 	response = new HandlerResponse(true);
-	response.append('{"status":"OK","cmd":"increaseVolume","volume":'+getVolume()+',"ticks":'+getVolumeStep()+'}');
+	response.append('{"status":"OK","cmd":"increaseVolume","volume":'+getVolume()+',"ticks":'+step+'}');
 	return response;
 }
 
 cmdVolumeDown = function(path){
-	response = decVolume();
+	var step = parseInt(path.substring(path.lastIndexOf("/")+1));
+	if ( isNaN(step) ) { step = getVolumeStep(); }
+	
+	response = decVolume(step);
 	response = new HandlerResponse(true);
-	response.append('{"status":"OK","cmd":"decreaseVolume","volume":'+getVolume()+',"ticks":'+getVolumeStep()+'}');
+	response.append('{"status":"OK","cmd":"decreaseVolume","volume":'+getVolume()+',"ticks":'+step+'}');
 	return response;
+}
 
+cmdVolumeSet = function(path){
+	var volume = parseInt(path.substring(path.lastIndexOf("/")+1));
+	if ( isNaN(volume) ) { volume = 0; }
+
+	Amarok.Engine.volume = volume;
+	response = new HandlerResponse(true);
+	response.append('{"status":"OK","cmd":"setVolume","volume":'+volume+',"ticks":'+getVolumeStep()+'}');
+	return response;
 }
 
 cmdMute = function(path){
@@ -493,21 +507,4 @@ getCollectionSearchAllJSON = function(path){
     response.append('{"status":"OK","count":'+countTotal+',"args":{"searchQuery":"'+ jsonEscape(queryString) +'"},"results":{"artists":['+resultArtists+'],"albums":['+resultAlbums+'],"tracks":['+resultTracks+']}}');
 
     return response
-}
-
-authAsGuest = function(path) {
-	response = new HandlerResponse(true);
-	USER_MODE = USER_MODE_GUEST;
-	response.append('{"status":"OK","auth":"guest"}');
-	return response;
-}
-
-/**
-  * Placeholder for now!
-  */
-authAsDj = function(path) {
-	response = new HandlerResponse(true);
-	USER_MODE = USER_MODE_DJ;
-	response.append('{"status":"OK","auth":"dj"}');
-	return response;
 }
