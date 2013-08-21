@@ -327,39 +327,129 @@ getCollectionAllArtistsJSON = function(path){
     return response;
 }
 
-getCollectionTracksByArtistIdJSON = function(path){
-    artistId = parseInt(path.substring(path.lastIndexOf("/")+1));
-    trackQuery = Amarok.Collection.query('SELECT t.id, t.title, a.name AS artist, b.name AS album FROM tracks AS t JOIN artists AS a ON a.id = t.artist JOIN albums AS b ON t.album = b.id WHERE a.id = '+artistId+';');
+
+getCollectionTracks = function(artistId, rowCount, offset){
+	offset = parseInt( offset );
+	rowCount = parseInt( rowCount );
+	
+	if ( isNaN(offset) ) { offset = 0; }
+	if ( isNaN(rowCount) ) { rowCount = 500; }
+	
+	sqlFilter = '';
+	sqlLimit = '';
+	responseArgs = '';
+
+	if ( artistId == 'all' ) {
+		sqlFilter = '';
+	}
+	else {
+		if ( isNaN(artistId) ) { 
+			artistId = 0;
+		}
+		sqlFilter = ' AND a.id = '+artistId + ' ';
+		responseArgs = '"artistId":'+ artistId;
+	} 
+
+	if ( rowCount != -1 ) {
+		sqlLimit = ' LIMIT ' + rowCount;
+		responseArgs += ( responseArgs == '' ? '' : ',' ) + '"rowCount":'+ rowCount;
+
+		sqlLimit += " OFFSET " + offset;
+		responseArgs += ',"offset":' + offset;
+	}
+	
+	if ( responseArgs != '' ) {
+		responseArgs = '"args":{'+responseArgs+'},';
+	}
+	
+	columns = 't.id, t.title, a.name AS artist, b.name AS album, g.name AS genre, y.name AS year, t.length, t.tracknumber, t.createdate, t.modifydate, t.artist AS artistId, t.album AS albumId, t.genre AS genreId';
+	nbColums = 13;
+
+	unlimitedCount = '';
+	if ( sqlLimit != '' ) {
+		trackQuery = Amarok.Collection.query('SELECT t.id FROM tracks AS t JOIN artists AS a ON a.id = t.artist JOIN albums AS b ON t.album = b.id LEFT JOIN genres AS g on g.id = t.genre LEFT JOIN years AS y ON t.year = y.id WHERE 1 ' + sqlFilter );
+		unlimitedCount = '"totalCount":'+trackQuery.length+',';
+	}
+
+	trackQuery = Amarok.Collection.query('SELECT ' + columns + ' FROM tracks AS t JOIN artists AS a ON a.id = t.artist JOIN albums AS b ON t.album = b.id LEFT JOIN genres AS g on g.id = t.genre LEFT JOIN years AS y ON t.year = y.id WHERE 1 ' + sqlFilter + " ORDER BY t.id " + sqlLimit );
     trackCount = trackQuery.length;
     var tracks = '';
-	
-    for(trackidx = 0; trackidx < trackCount; trackidx = trackidx+4){
+
+    for(trackidx = 0; trackidx < trackCount; trackidx = trackidx+nbColums){
 		
 		trackId = trackQuery[trackidx];
 		trackTitle = trackQuery[trackidx+1];
 		artistName = trackQuery[trackidx+2];
 		albumName = trackQuery[trackidx+3];
+		genreName = trackQuery[trackidx+4];
+		year = trackQuery[trackidx+5];
+		length = trackQuery[trackidx+6];
+		trackNumber = trackQuery[trackidx+7];
+		createDate = trackQuery[trackidx+8];
+		modifyDate = trackQuery[trackidx+9];
+		artistId = trackQuery[trackidx+10];
+		albumId = trackQuery[trackidx+11];
+		genreId = trackQuery[trackidx+12];
 
-		if(trackTitle=="") trackTitle = "---";
-		if(artistName=="") artistName = "---";
-		if(albumName=="") albumName = "---";
+		if ( isNaN( year) ) year = 0;
+		if ( isNaN( length ) ) length = 0;
+		if ( isNaN(trackNumber) ) trackNumber = 0;
 
 		var track = '"id":' + trackId + ',';
-		track += '"title":"' + jsonEscape(trackTitle) + '",';
-		track += '"artist":"' + jsonEscape(artistName) + '",';
-		track += '"album":"' + jsonEscape(albumName) + '",';
-		track += '"cover":null';
+		track += '"title":' + ( trackTitle == "" ? 'null' : '"' +jsonEscape(trackTitle) + '"' ) + ',';
+		if ( artistName != '' && artistId > 0 ) {
+			track += '"artist":' + ( artistName == "" ? 'null' : '"' +jsonEscape(artistName) + '"' ) + ',';
+			track += '"artistId":' + ( artistId <= 0 ? 'null' : artistId ) + ',';
+		}
+		if ( albumName != '' && albumId > 0 ) {
+			track += '"album":' + ( albumName == "" ? 'null' : '"' +jsonEscape(albumName) + '"' ) + ',';
+			track += '"albumId":' + ( albumId <= 0 ? 'null' : albumId ) + ',';
+		}
+		if ( genreName != '' && genreId > 0 ) {
+			track += '"genre":' + ( genreName == "" ? 'null' : '"' +jsonEscape(genreName) + '"' ) + ',';
+			track += '"genreId":' + ( genreId <= 0 ? 'null' : genreId ) + ',';
+		}
+		if ( year > 0 )
+			track += '"year":' + ( year <= 0 ? 'null' : year ) + ',';
+		if ( length > 0 )
+			track += '"length":' + ( length <= 0 ? 'null' : length ) + ',';
+		if ( trackNumber > 0 )
+			track += '"track":' + ( trackNumber <= 0 ? 'null' : trackNumber ) + ',';
+		track += '"dateCreated":' + createDate + ',';
+		track += '"dateModified":' + modifyDate; // + ',';
+// 		track += '"cover":null';
 
 		tracks += '{' + track + '}';	
-		if ( trackidx + 4 < trackCount ) {
+		if ( trackidx + nbColums < trackCount ) {
 			tracks += ',';
 		}
     }
-        
+
     response = new HandlerResponse(true);
-	response.append('{"status":"OK","count":'+(trackCount/4)+',"args":{"artistId":'+ artistId +'},"results":['+tracks+']}');
-	
+	response.append('{"status":"OK","count":'+(trackCount/nbColums)+',' + unlimitedCount + responseArgs + '"results":['+tracks+']}');
+
     return response
+}
+
+getCollectionAllTracksJSON = function(path){
+	
+	limit = path.substring(path.lastIndexOf("/")+1);
+
+	if ( limit != null && limit.length > 0 ) {
+		limit += ',';
+		args = limit .split(",");
+		return getCollectionTracks( 'all' , args[0], args[1] );
+	}
+	else {
+		return getCollectionTracks( 'all' , 500 , 0 );
+	}
+}
+
+getCollectionTracksByArtistIdJSON = function(path){
+    artistId = parseInt(path.substring(path.lastIndexOf("/")+1));
+	if ( isNaN(artistId) ) { artistId = 0; }
+	
+	return getCollectionTracks( artistId );
 }
 
 getCollectionAlbumsByArtistIdJSON = function(path){

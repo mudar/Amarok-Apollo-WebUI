@@ -67,7 +67,7 @@ writeConfigV = function( key, value ) {
 }
 
 jsonEscape = function(str) {
-	return str.replace("\\", "\\\\").replace(/["]/g, '\\"');
+	return str.replace(/\\/g, "\\\\").replace(/["]/g, '\\"');
 }
 
 getIpAddress = function() {

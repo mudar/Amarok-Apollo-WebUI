@@ -66,7 +66,7 @@ AmarokWebUI.prototype.startService = function() {
   this.http.registerHandler("/collection/artist", collectionArtistAlbumsDiv);
   this.http.registerHandler("/collection", collectionIndex);
   this.http.registerHandler("/index.html", homepageDiv);
-this.http.registerHandler("/api/getServerVersion", getServerVersionJSON);
+  this.http.registerHandler("/api/getServerVersion", getServerVersionJSON);
   this.http.registerHandler("/api/getState", getStateJSON);
   this.http.registerHandler("/api/getGuestCountdown", getGuestCountdown);
   this.http.registerHandler("/api/getCurrentTrack", getCurrentTrackJSON);
@@ -89,6 +89,7 @@ this.http.registerHandler("/api/getServerVersion", getServerVersionJSON);
   this.http.registerHandler("/api/cmd/addPlayMedia", cmdCollectionPlayByTrackId);
   this.http.registerHandler("/api/cmd/addMedia", cmdCollectionEnqueue);
   this.http.registerHandler("/api/cmd/setRating", cmdSetRating);
+  this.http.registerHandler("/api/getCollectionAllTracks", getCollectionAllTracksJSON);
   this.http.registerHandler("/api/getCollectionAllArtists", getCollectionAllArtistsJSON);
   this.http.registerHandler("/api/getCollectionTracksByArtistId", getCollectionTracksByArtistIdJSON);
   this.http.registerHandler("/api/getCollectionAlbumsByArtistId", getCollectionAlbumsByArtistIdJSON);
