@@ -45,7 +45,7 @@ getCollectionInfoJSON = function(path) {
 
 getStateJSON = function(path){
 	response = new HandlerResponse(true);
-	response.append('{"status":"OK","engineState":'+Amarok.Engine.engineState()+'}');
+	response.append('{"status":"OK",' + appendPlaybackInfo() + '}');
 	return response;
 }
 
@@ -124,7 +124,7 @@ cmdPlaylistClear = function(path){
 cmdPrev = function(path){
 	response = prevTrack();
 	response = new HandlerResponse(true);
-	response.append('{"status":"OK","cmd":"prev"}');
+	response.append('{"status":"OK","cmd":"prev",' + appendPlaybackInfo() + '}');
 	return response;
 }
 
@@ -134,7 +134,7 @@ cmdNext = function(path){
 	
 	response = nextTrack();
 	response = new HandlerResponse(true);
-	response.append('{"status":"OK","cmd":"next"}');
+	response.append('{"status":"OK","cmd":"next",' + appendPlaybackInfo() + '}');
 	return response;
 }
 
@@ -142,7 +142,7 @@ cmdPlay = function(path){
 	
 	response = play();
 	response = new HandlerResponse(true);
-	response.append('{"status":"OK","cmd":"play"}');
+	response.append('{"status":"OK","cmd":"play",' + appendPlaybackInfo() + '}');
 	return response;
 }
 
@@ -150,7 +150,7 @@ cmdPause = function(path){
 	
 	response = pause();
 	response = new HandlerResponse(true);
-	response.append('{"status":"OK","cmd":"pause"}');
+	response.append('{"status":"OK","cmd":"pause",' + appendPlaybackInfo() + '}');
 	return response;
 }
 
@@ -162,14 +162,14 @@ cmdPlayPause = function(path){
 	
 	response = playPause();
 	response = new HandlerResponse(true);
-	response.append('{"status":"OK","cmd":"playPause","engineState":'+state+'}');
+	response.append('{"status":"OK","cmd":"playPause",' + appendPlaybackInfo() + '}');
 	return response;
 }
 
 cmdStop = function(path){
 	response = stop();
 	response = new HandlerResponse(true);
-	response.append('{"status":"OK","cmd":"stop"}');
+	response.append('{"status":"OK","cmd":"stop",' + appendPlaybackInfo() + '}');
 	return response;
 }
 
@@ -179,7 +179,7 @@ cmdVolumeUp = function(path){
 	
 	response = incVolume(step);
 	response = new HandlerResponse(true);
-	response.append('{"status":"OK","cmd":"increaseVolume","volume":'+getVolume()+',"ticks":'+step+'}');
+	response.append('{"status":"OK","cmd":"increaseVolume","args":{"ticks":'+step+'},' + appendPlaybackInfo() + '}');
 	return response;
 }
 
@@ -189,7 +189,7 @@ cmdVolumeDown = function(path){
 	
 	response = decVolume(step);
 	response = new HandlerResponse(true);
-	response.append('{"status":"OK","cmd":"decreaseVolume","volume":'+getVolume()+',"ticks":'+step+'}');
+	response.append('{"status":"OK","cmd":"decreaseVolume","args":{"ticks":'+step+'},' + appendPlaybackInfo() + '}');
 	return response;
 }
 
@@ -199,14 +199,14 @@ cmdVolumeSet = function(path){
 
 	Amarok.Engine.volume = volume;
 	response = new HandlerResponse(true);
-	response.append('{"status":"OK","cmd":"setVolume","volume":'+volume+',"ticks":'+getVolumeStep()+'}');
+	response.append('{"status":"OK","cmd":"setVolume","args":{"volume":'+volume+'},' + appendPlaybackInfo() + '}');
 	return response;
 }
 
 cmdMute = function(path){
 	response = new mute();
 	response = new HandlerResponse(true);
-	response.append('{"status":"OK","cmd":"mute","volume":'+getVolume()+'}');
+	response.append('{"status":"OK","cmd":"mute",' + appendPlaybackInfo() + '}');
 	return response;
 }
 
@@ -216,7 +216,7 @@ cmdPlayByIndex = function(path){
 	
     response = playByIndex(index);
 	response = new HandlerResponse(true);
-	response.append('{"status":"OK","cmd":"playlist/playByIndex","args":{"index":'+index+'}}');
+	response.append('{"status":"OK","cmd":"playlist/playByIndex","args":{"index":'+index+'},' + appendPlaybackInfo() + '}');
 	return response;
 }
 
@@ -251,7 +251,7 @@ cmdCollectionPlayByTrackId = function(path){
 	}
 
 	response = new HandlerResponse(true);
-	response.append('{"status":"OK","cmd":"playlist/addPlayMedia","args":{"trackId":'+trackId+'},"results":{"media":'+(media==null?'null':'"'+media+'"')+'}}');
+	response.append('{"status":"OK","cmd":"playlist/addPlayMedia","args":{"trackId":'+trackId+'},"results":{"media":'+(media==null?'null':'"'+media+'"')+'},' + appendPlaybackInfo() + '}');
 	return response;
 }
 
@@ -611,4 +611,9 @@ getCollectionSearchAllJSON = function(path){
     response.append('{"status":"OK","count":'+countTotal+',"args":{"searchQuery":"'+ jsonEscape(queryString) +'"},"results":{"artists":['+resultArtists+'],"albums":['+resultAlbums+'],"tracks":['+resultTracks+']}}');
 
     return response
+}
+
+appendPlaybackInfo = function() {
+	playback = '"playback": {"volume":'+getVolume()+',"engineState":'+Amarok.Engine.engineState()+'}';
+	return playback;
 }

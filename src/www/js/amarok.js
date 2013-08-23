@@ -91,7 +91,7 @@ togglePlayPauseIcon = function(button, data) {
 	if ( data['status'] == 'OK' ) {
 		newIcon = 'amarok-pause';
 		oldIcon = 'amarok-play';
-		if ( data['engineState'] == 1 ) {
+		if ( data['playback']['engineState'] == 1 ) {
 			newIcon = 'amarok-play';
 			oldIcon = 'amarok-pause';
 		}
