@@ -594,3 +594,30 @@ homepageDiv = function(path) {
 	response.append(div);
     return response;
 }
+
+function getTotalTracks() {
+	return Amarok.Collection.totalTracks();
+}
+
+function getTotalArtists() {
+	return Amarok.Collection.totalArtists();
+}
+
+function getTotalAlbums() {
+	return Amarok.Collection.totalAlbums();
+}
+
+function getTotalGenres() {
+	return Amarok.Collection.totalGenres();
+}
+
+function getLastUpdateDate() {
+	directoriesQuery = Amarok.Collection.query('SELECT MAX(`changedate`) FROM `directories`');
+	tracksQuery = Amarok.Collection.query('SELECT MAX( `createdate` ) , MAX( `modifydate` ) FROM `tracks` ');
+	if ( directoriesQuery.length == 0 || tracksQuery.length == 0 ) {
+		return 0;
+	}
+	else {
+		return Math.max(directoriesQuery[0], tracksQuery[0], tracksQuery[1]);
+	}
+}

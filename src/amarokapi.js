@@ -29,6 +29,20 @@ getServerVersionJSON = function(path){
 	return response;
 }
 
+getCollectionInfoJSON = function(path) {
+	response = new HandlerResponse(true);
+	
+	info = '';
+	info += '"totalTracks":' +  getTotalTracks();
+	info += ',"totalArtists":' +  getTotalArtists();
+	info += ',"totalAlbums":' +  getTotalAlbums();
+	info += ',"totalGenres":' +  getTotalGenres();
+	info += ',"lastUpdateDate":' +  getLastUpdateDate();
+	
+	response.append('{"status":"OK","results":{'+info+'}}');
+	return response;
+}
+
 getStateJSON = function(path){
 	response = new HandlerResponse(true);
 	response.append('{"status":"OK","engineState":'+Amarok.Engine.engineState()+'}');
