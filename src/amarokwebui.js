@@ -92,6 +92,8 @@ AmarokWebUI.prototype.startService = function() {
   this.http.registerHandler("/api/cmd/setRating", cmdSetRating);
   this.http.registerHandler("/api/getCollectionAllTracks", getCollectionAllTracksJSON);
   this.http.registerHandler("/api/getCollectionAllArtists", getCollectionAllArtistsJSON);
+  this.http.registerHandler("/api/getCollectionAllAlbums", getCollectionAllAlbumsJSON);
+  this.http.registerHandler("/api/getCollectionAllGenres", getCollectionAllGenresJSON);
   this.http.registerHandler("/api/getCollectionTracksByArtistId", getCollectionTracksByArtistIdJSON);
   this.http.registerHandler("/api/getCollectionAlbumsByArtistId", getCollectionAlbumsByArtistIdJSON);
   this.http.registerHandler("/api/getCollectionSearchAll", getCollectionSearchAllJSON);

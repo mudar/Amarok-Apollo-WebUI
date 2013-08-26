@@ -341,6 +341,52 @@ getCollectionAllArtistsJSON = function(path){
     return response;
 }
 
+getCollectionAllAlbumsJSON = function(path){
+    response = new HandlerResponse(true);
+    albums = "";
+    albumsQuery = Amarok.Collection.query("SELECT name, id, artist FROM albums ORDER BY name, artist");
+    nbAlbums = albumsQuery.length;
+	totalAlbums = 0;
+    for(albumidx=0; albumidx<nbAlbums; albumidx++){		 
+		album = albumsQuery[albumidx++];
+		albumId = albumsQuery[albumidx++];
+		artistId = albumsQuery[albumidx];
+		artistId = ( artistId == '' ? 'null' : artistId );
+		if (album.length>0){
+			albums += '{"id":' + albumId + ',"name":"' + jsonEscape(album) + '","artistId":' + artistId + '}';
+			if (albumidx+1<nbAlbums) {
+			  albums += ",";
+			}
+			totalAlbums++;
+		}
+    }
+    response.append('{"status":"OK","count":'+totalAlbums+',"results":['+albums+']}');
+      
+    return response;
+}
+
+getCollectionAllGenresJSON = function(path){
+    response = new HandlerResponse(true);
+    genres = "";
+    genresQuery = Amarok.Collection.query("SELECT name, id FROM genres ORDER BY name;");
+    nbGenres = genresQuery.length;
+	totalGenres = 0;
+    for(genreidx=0; genreidx<nbGenres; genreidx++){		 
+		genre = genresQuery[genreidx++];
+		genretId = genresQuery[genreidx];
+		if (genre.length>0){
+			genres += '{"id":' + genretId + ',"name":"' + jsonEscape(genre) + '"}';
+			if (genreidx+1<nbGenres) {
+			  genres += ",";
+			}
+			totalGenres++;
+		}
+    }
+    response.append('{"status":"OK","count":'+totalGenres+',"results":['+genres+']}');
+      
+    return response;
+}
+
 
 getCollectionTracks = function(artistId, rowCount, offset){
 	offset = parseInt( offset );
@@ -360,7 +406,7 @@ getCollectionTracks = function(artistId, rowCount, offset){
 		if ( isNaN(artistId) ) { 
 			artistId = 0;
 		}
-		sqlFilter = ' AND a.id = '+artistId + ' ';
+		sqlFilter = ' AND t.artist = '+artistId + ' ';
 		responseArgs = '"artistId":'+ artistId;
 	} 
 
@@ -376,16 +422,16 @@ getCollectionTracks = function(artistId, rowCount, offset){
 		responseArgs = '"args":{'+responseArgs+'},';
 	}
 	
-	columns = 't.id, t.title, a.name AS artist, b.name AS album, g.name AS genre, y.name AS year, t.length, t.tracknumber, t.createdate, t.modifydate, t.artist AS artistId, t.album AS albumId, t.genre AS genreId';
-	nbColums = 13;
+	columns = 't.id, t.title, y.name AS year, t.length, t.tracknumber, t.createdate, t.modifydate, t.artist AS artistId, t.album AS albumId, t.genre AS genreId';
+	nbColums = 10;
 
 	unlimitedCount = '';
 	if ( sqlLimit != '' ) {
-		trackQuery = Amarok.Collection.query('SELECT t.id FROM tracks AS t JOIN artists AS a ON a.id = t.artist JOIN albums AS b ON t.album = b.id LEFT JOIN genres AS g on g.id = t.genre LEFT JOIN years AS y ON t.year = y.id WHERE 1 ' + sqlFilter );
+		trackQuery = Amarok.Collection.query('SELECT t.id FROM tracks AS t LEFT JOIN years AS y ON t.year = y.id WHERE 1 ' + sqlFilter );
 		unlimitedCount = '"totalCount":'+trackQuery.length+',';
 	}
 
-	trackQuery = Amarok.Collection.query('SELECT ' + columns + ' FROM tracks AS t JOIN artists AS a ON a.id = t.artist JOIN albums AS b ON t.album = b.id LEFT JOIN genres AS g on g.id = t.genre LEFT JOIN years AS y ON t.year = y.id WHERE 1 ' + sqlFilter + " ORDER BY t.id " + sqlLimit );
+	trackQuery = Amarok.Collection.query('SELECT ' + columns + ' FROM tracks AS t LEFT JOIN years AS y ON t.year = y.id WHERE 1 ' + sqlFilter + " ORDER BY t.id " + sqlLimit );
     trackCount = trackQuery.length;
     var tracks = '';
 
@@ -393,17 +439,14 @@ getCollectionTracks = function(artistId, rowCount, offset){
 		
 		trackId = trackQuery[trackidx];
 		trackTitle = trackQuery[trackidx+1];
-		artistName = trackQuery[trackidx+2];
-		albumName = trackQuery[trackidx+3];
-		genreName = trackQuery[trackidx+4];
-		year = trackQuery[trackidx+5];
-		length = trackQuery[trackidx+6];
-		trackNumber = trackQuery[trackidx+7];
-		createDate = trackQuery[trackidx+8];
-		modifyDate = trackQuery[trackidx+9];
-		artistId = trackQuery[trackidx+10];
-		albumId = trackQuery[trackidx+11];
-		genreId = trackQuery[trackidx+12];
+		year = trackQuery[trackidx+2];
+		length = trackQuery[trackidx+3];
+		trackNumber = trackQuery[trackidx+4];
+		createDate = trackQuery[trackidx+5];
+		modifyDate = trackQuery[trackidx+6];
+		artistId = trackQuery[trackidx+7];
+		albumId = trackQuery[trackidx+8];
+		genreId = trackQuery[trackidx+9];
 
 		if ( isNaN( year) ) year = 0;
 		if ( isNaN( length ) ) length = 0;
@@ -411,24 +454,12 @@ getCollectionTracks = function(artistId, rowCount, offset){
 
 		var track = '"id":' + trackId + ',';
 		track += '"title":' + ( trackTitle == "" ? 'null' : '"' +jsonEscape(trackTitle) + '"' ) + ',';
-		if ( artistName != '' && artistId > 0 ) {
-			track += '"artist":' + ( artistName == "" ? 'null' : '"' +jsonEscape(artistName) + '"' ) + ',';
-			track += '"artistId":' + ( artistId <= 0 ? 'null' : artistId ) + ',';
-		}
-		if ( albumName != '' && albumId > 0 ) {
-			track += '"album":' + ( albumName == "" ? 'null' : '"' +jsonEscape(albumName) + '"' ) + ',';
-			track += '"albumId":' + ( albumId <= 0 ? 'null' : albumId ) + ',';
-		}
-		if ( genreName != '' && genreId > 0 ) {
-			track += '"genre":' + ( genreName == "" ? 'null' : '"' +jsonEscape(genreName) + '"' ) + ',';
-			track += '"genreId":' + ( genreId <= 0 ? 'null' : genreId ) + ',';
-		}
-		if ( year > 0 )
-			track += '"year":' + ( year <= 0 ? 'null' : year ) + ',';
-		if ( length > 0 )
-			track += '"length":' + ( length <= 0 ? 'null' : length ) + ',';
-		if ( trackNumber > 0 )
-			track += '"track":' + ( trackNumber <= 0 ? 'null' : trackNumber ) + ',';
+		track += '"artistId":' + ( artistId <= 0 ? 'null' : artistId ) + ',';
+		track += '"albumId":' + ( albumId <= 0 ? 'null' : albumId ) + ',';
+		track += '"genreId":' + ( genreId <= 0 ? 'null' : genreId ) + ',';
+		track += '"year":' + ( year <= 0 ? 'null' : year ) + ',';
+		track += '"length":' + ( length <= 0 ? 'null' : length ) + ',';
+		track += '"track":' + ( trackNumber <= 0 ? 'null' : trackNumber ) + ',';
 		track += '"dateCreated":' + createDate + ',';
 		track += '"dateModified":' + modifyDate; // + ',';
 // 		track += '"cover":null';
