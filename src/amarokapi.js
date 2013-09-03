@@ -329,11 +329,9 @@ getCollectionAllArtistsJSON = function(path){
     for(artistidx=0; artistidx<nbArtists; artistidx++){		 
 		artist = artistsQuery[artistidx++];
 		artistId = artistsQuery[artistidx];
-		if (artist.length>0){
-			artists += '{"id":' + artistId + ',"name":"' + jsonEscape(artist) + '"}';
-			if (artistidx+1<nbArtists) {
-			  artists += ",";
-			}
+		artists += '{"id":' + artistId + ',"name":' + ( artist.length == 0 ? 'null' : '"' + jsonEscape(artist) + '"' ) + '}';
+		if (artistidx+1<nbArtists) {
+			artists += ",";
 		}
     }
     response.append('{"status":"OK","count":'+(nbArtists / 2 )+',"results":['+artists+']}');
@@ -344,23 +342,20 @@ getCollectionAllArtistsJSON = function(path){
 getCollectionAllAlbumsJSON = function(path){
     response = new HandlerResponse(true);
     albums = "";
-    albumsQuery = Amarok.Collection.query("SELECT name, id, artist FROM albums ORDER BY name, artist");
+    albumsQuery = Amarok.Collection.query("SELECT name, id, artist FROM albums ORDER BY name, artist, id");
     nbAlbums = albumsQuery.length;
-	totalAlbums = 0;
+
     for(albumidx=0; albumidx<nbAlbums; albumidx++){		 
 		album = albumsQuery[albumidx++];
 		albumId = albumsQuery[albumidx++];
 		artistId = albumsQuery[albumidx];
 		artistId = ( artistId == '' ? 'null' : artistId );
-		if (album.length>0){
-			albums += '{"id":' + albumId + ',"name":"' + jsonEscape(album) + '","artistId":' + artistId + '}';
-			if (albumidx+1<nbAlbums) {
-			  albums += ",";
-			}
-			totalAlbums++;
+		albums += '{"id":' + albumId + ',"name":' + ( album.length == 0 ? 'null' : '"' + jsonEscape(album) + '"' ) + ',"artistId":' + artistId + '}';
+		if (albumidx+1<nbAlbums) {
+			albums += ",";
 		}
     }
-    response.append('{"status":"OK","count":'+totalAlbums+',"results":['+albums+']}');
+    response.append('{"status":"OK","count":'+(nbAlbums/3)+',"results":['+albums+']}');
       
     return response;
 }
@@ -370,19 +365,15 @@ getCollectionAllGenresJSON = function(path){
     genres = "";
     genresQuery = Amarok.Collection.query("SELECT name, id FROM genres ORDER BY name;");
     nbGenres = genresQuery.length;
-	totalGenres = 0;
     for(genreidx=0; genreidx<nbGenres; genreidx++){		 
 		genre = genresQuery[genreidx++];
 		genretId = genresQuery[genreidx];
-		if (genre.length>0){
-			genres += '{"id":' + genretId + ',"name":"' + jsonEscape(genre) + '"}';
-			if (genreidx+1<nbGenres) {
-			  genres += ",";
-			}
-			totalGenres++;
+		genres += '{"id":' + genretId + ',"name":' + ( genre.length == 0 ? 'null' : '"' + jsonEscape(genre) + '"' ) + '}';
+		if (genreidx+1<nbGenres) {
+		  genres += ",";
 		}
     }
-    response.append('{"status":"OK","count":'+totalGenres+',"results":['+genres+']}');
+    response.append('{"status":"OK","count":'+(nbGenres/2)+',"results":['+genres+']}');
       
     return response;
 }
