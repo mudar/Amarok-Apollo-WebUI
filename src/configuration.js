@@ -1,6 +1,7 @@
 /*
  *    Copyright (C) 2012 by Martin Hoeher <martin@rpdev.net>
  *    Copyright (C) 2013 by Mudar Noufal <mn@mudar.ca>
+ *    Copyright (C) 2013 by Tomasz Rozynek <tomasz.rozynek@gmail.com>
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -169,6 +170,7 @@ Configuration.prototype.setupGui = function() {
 		this.langComboBox.addItem('French','fr');
 		this.langComboBox.addItem('German','de');
 		this.langComboBox.addItem('Italian','it');
+		this.langComboBox.addItem('Polish','pl');
 		this.langComboBox.addItem('Portuguese','pt');
 		this.langComboBox.addItem('Russian','ru');
 		this.langComboBox.addItem('Spanish','es');
